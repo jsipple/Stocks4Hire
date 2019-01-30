@@ -7,7 +7,10 @@ let stockValue = []
 function getURL() {
 url = API + query
 $.get(url).then(function(obj) {
-    for (let i = 0; i < 10; i++) {
+
+    console.log(obj);
+
+    for (let i = 0; i < 20; i++) {
     date.push(obj[i].date)
     stockValue.push(obj[i].vwap)
     // yAxesMin = Math.min(...stockValue) - 10
@@ -26,17 +29,17 @@ var myChart = new Chart(ctx, {
             label: 'stock price',
             data: stockValue,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)'
+                'rgba(0, 0, 0, 0.5)'
             ],
             borderColor: [
-                'rgba(255,99,132,1)'
+                'rgba(0, 255, 0, 1)'
             ],
             borderWidth: 1
         }]
     },
     options: {
         responsive:true,
-        maintainAspectRatio:false,
+        maintainAspectRatio:true,
         scales: {
             yAxes: [{
                 ticks: {
