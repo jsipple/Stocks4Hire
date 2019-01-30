@@ -1,6 +1,6 @@
 let API = "https://api.iextrading.com/1.0"
 let query = "/stock/aapl/chart"
-let date = []
+let date = 5
 // let yAxesMin;
 // let yAxesMax;
 let stockValue = []
@@ -51,6 +51,7 @@ var myChart = new Chart(ctx, {
 // when you click on a stock it dropsdown below(using bootstrap) and shows a graph with one month of stock data
 
 // when clicking the star icon next to the stock it will add it to the users favorites firebase
+
 // basic login page that will push user data to firebase or retrieve if already there
 
 // have a moment clock that lists the time until market closes update this every 60000ms(1min)
