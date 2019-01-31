@@ -1,4 +1,14 @@
-.container {
+.jumbotron {
+    background-color: #000080;
+    color: white;
+}
+
+.card-header {
+    background-color: black;
+    color: white;
+}
+/* .container {
     height: 40vh;
     width: 50vw;
-}
+} */
+
