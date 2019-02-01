@@ -1,21 +1,40 @@
 .jumbotron {
-    background-color: #000080;
+    background-color: black;
     color: white;
+    padding: 10px;
 }
 
 .card-header {
     background-color: black;
     color: white;
 }
+#logo {
+    height: 150px;
+    text-align: left;
+
+}
+h1 {
+    font-size: 30px;
+    text-align: right;
+    color: #eace6a;
+    font-weight: bolder;
+}
+h2 {
+    font-size: 15px;
+    text-align: right;
+    color: #eace6a;
+    font-style: italic;
+}
+
+.flex-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 /* .container {
     height: 40vh;
     width: 50vw;
 } */
 
-.stocks {
-    float: left;
-}
 
-.news {
-    float: right;
-}
+
