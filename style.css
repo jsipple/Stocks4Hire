@@ -12,3 +12,10 @@
     width: 50vw;
 } */
 
+.stocks {
+    float: left;
+}
+
+.news {
+    float: right;
+}
