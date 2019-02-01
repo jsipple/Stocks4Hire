@@ -1,3 +1,10 @@
+body {
+    background:url(../project1/images/background-picture.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
 .jumbotron {
     background-color: black;
     color: white;
@@ -31,6 +38,12 @@ h2 {
     justify-content: space-between;
     align-items: center;
 }
+
+/* .navbar {
+    float: right;
+} */
+
+
 /* .container {
     height: 40vh;
     width: 50vw;
