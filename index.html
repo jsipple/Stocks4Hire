@@ -10,9 +10,26 @@
  <title>Document</title>
 </head>
 <body>
-<div class="container">
-<canvas id="myChart" width="150" height="150" ></canvas>
-</div>
+    <div class="container">
+        <a>Stock History:</a>
+        <div class="row">
+
+             <form id="form">
+
+                <label for="user-input" value="Add a Sport"></label>
+
+                <input type="text" id="user-input">
+            
+                <input id="add-button" type="submit" value="Enter Company Symbol">
+        
+            </form>
+        
+            <div class="col-md-12">
+
+            <canvas id="myChart" width="150" height="150" ></canvas>
+            </div>
+        </div>
+    </div>
 <script src="app.js"></script>
 </body>
 </html>
