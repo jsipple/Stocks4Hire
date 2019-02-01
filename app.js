@@ -1,56 +1,167 @@
-let API = "https://api.iextrading.com/1.0"
-let query = "/stock/aapl/chart"
-let date = []
-// let yAxesMin;
-// let yAxesMax;
-let stockValue = []
-function getURL() {
-url = API + query
-$.get(url).then(function(obj) {
+$(document).ready(function() {
 
-    console.log(obj);
+    let date = []
 
-    for (let i = 0; i < 20; i++) {
-    date.push(obj[i].date)
-    stockValue.push(obj[i].vwap)
-    // yAxesMin = Math.min(...stockValue) - 10
-    console.log(stockValue)
-    }
-}).catch( error => console.log(error))
-} 
-getURL()
-// chart need to make it so that it changes based on different click functions
-setTimeout(function() {
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: date,
-        datasets: [{
-            label: 'stock price',
-            data: stockValue,
-            backgroundColor: [
-                'rgba(0, 0, 0, 0.5)'
-            ],
-            borderColor: [
-                'rgba(0, 255, 0, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive:true,
-        maintainAspectRatio:true,
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:false
-                }
-            }]
+    let stockValue = []
+
+    var myChart
+
+    var clicked = true;
+
+    $("#add-button").on("click", function(event){
+
+        var first;
+        var last;
+
+        date = []
+
+        stockValue = []
+    
+        event.preventDefault();
+
+        $("#numbers").empty();
+
+        var input = $("#user-input").val().trim()
+
+        input = input.toUpperCase();
+
+        var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+    .then(function(response){
+
+        getNews(response[input].quote.companyName);
+
+        console.log(response);
+        
+        for(var i = 0; i < response[input].chart.length; i++){
+
+            stockValue.push(response[input].chart[i].close);
+            date.push(response[input].chart[i].date);
+
         }
-    }
+
+        first = stockValue[0];
+        last = stockValue[20];
+
+        var color;
+
+            if (first > last){
+                color = 'rgba(200, 0, 0, 1)'
+                $("#my-data").css("background-color", "red");
+            }
+            else if(first < last){
+                color = 'rgba(0, 200, 0, 1)'
+                $("#my-data").css("background-color", "green");
+            }
+
+        $("#stock-name").text("Stock: " + input);
+        $("#current-price").text("Price: $" + last);
+
+        // Resets the chart so it doesn't freak out.
+        if (myChart != undefined)
+        {
+            myChart.destroy();
+        }
+
+        setTimeout(function(){
+            var ctx = document.getElementById("myChart").getContext('2d');
+            myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: date,
+
+                datasets: [{
+                    label: input,
+                    data: stockValue,
+                    backgroundColor:[
+                        'rgba(0, 0, 0, 0)'
+                    ],
+                    borderColor: [
+                        color
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: {
+                    labels: {
+                        fontColor: color
+                    }
+                },
+                responsive:true,
+                maintainAspectRatio:true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:false
+                        }
+                    }]
+                }
+            }
+    
+            });
+        }, 20);
+        $("#myChart").hide();
+        });
+
+    $("#my-data").unbind().on("click", function(){
+
+        console.log("hey")
+
+        if(!clicked){
+
+            $("#myChart").hide();
+            if (first > last){
+                $("#my-data").css("background-color", "red");
+            }
+            else if(first < last){
+                $("#my-data").css("background-color", "green");
+            }
+
+            $("#stock-name").show()
+            $("#current-price").show();
+
+            clicked = true;
+
+            return true;
+        }
+        else if(clicked){
+
+            $("#my-data").css("background-color", "black");
+            $("#myChart").show();
+
+            $("#stock-name").hide();
+            $("#current-price").hide();
+
+            clicked = false;
+
+            return false;
+        }
+    });
+
 });
-},1000)
+
+function getNews(item){
+
+    var URL = 'https://newsapi.org/v2/everything?q=' + item + '&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
+
+    $.ajax({
+        url: URL,
+        method: "GET"
+      })
+      .then(function(response){
+
+        console.log(response);
+
+    
+      });
+}
+
+});
 // when you click on a stock it dropsdown below(using bootstrap) and shows a graph with one month of stock data
 
 // when clicking the star icon next to the stock it will add it to the users favorites firebase

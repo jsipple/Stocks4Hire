@@ -1,5 +1,14 @@
+body{
+}
+
 .container {
     height: 75vh;
     width: 50vw;
-    background: black;
+}
+
+#stock-name, #current-price{
+    font-family: serif;
+    font-size: 40px;
+    margin-left: 20px;
+    margin-top: 30px;
 }

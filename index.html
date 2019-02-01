@@ -4,8 +4,11 @@
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta http-equiv="X-UA-Compatible" content="ie=edge">
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
  <link rel="stylesheet" href="style.css">
  <title>Document</title>
 </head>
@@ -24,9 +27,13 @@
         
             </form>
         
-            <div class="col-md-12">
+            <div class="col-md-12" id="my-data">
+            
+                <a id="stock-name"></a>
+                <a id="current-price"></a>
+                <a id="news"></a>
 
-            <canvas id="myChart" width="150" height="150" ></canvas>
+                <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
