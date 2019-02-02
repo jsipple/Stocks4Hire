@@ -39,6 +39,7 @@ h2 {
     align-items: center;
 }
 
+<<<<<<< HEAD
 .chart{
     width: 40px;
     height: 20px;
@@ -56,3 +57,9 @@ h2 {
 
 
 
+=======
+a { 
+    color: rgb(125, 168, 7); 
+    text-decoration:none;
+}
+>>>>>>> 5156d30d407a8513e054ef871667c866af604177
