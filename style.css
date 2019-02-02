@@ -42,7 +42,14 @@ h2 {
     align-items: center;
 }
 
+.chart{
+    width: 40px;
+    height: 20px;
+}
 
+/* .navbar {
+    float: right;
+} */
 
 #footer {
     position: absolute;
@@ -56,5 +63,7 @@ h2 {
     width: 50vw;
 } */
 
-
-
+a { 
+    color: rgb(125, 168, 7); 
+    text-decoration:none;
+}
