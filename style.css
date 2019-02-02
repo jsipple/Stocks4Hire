@@ -42,17 +42,14 @@ h2 {
     align-items: center;
 }
 
+
+
 #footer {
     position: absolute;
     bottom: 0;
     line-height: 0.15em;
     opacity: .75;
 }
-
-/* .navbar {
-    float: right;
-} */
-
 
 /* .container {
     height: 40vh;
