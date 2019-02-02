@@ -20,6 +20,8 @@ $(document).ready(function() {
 
         var input = $("#user-input").val().trim()
 
+        console.log(input);
+
         input = input.toUpperCase();
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
@@ -32,7 +34,7 @@ $(document).ready(function() {
 
         getNews(response[input].quote.companyName);
 
-    setTimeout(function(){
+    // setTimeout(function(){
         console.log(response);
         
         for(var i = 0; i < response[input].chart.length; i++){
@@ -56,18 +58,22 @@ $(document).ready(function() {
                 $("#my-data").css("color", "green");
             }
 
-        $("#stock-name").text("Stock: " + input);
-        $("#current-price").text("Price: $" + last);
+        var tbody = $("#stockslisted");
+        
+        var name = $("<td>").text(response[input].quote.companyName);
+        var close = $("<td>").text("$" + response[input].chart[20].close);
+        var canvas = $("<canvas>");
 
-        // Resets the chart so it doesn't freak out.
-        if (myChart != undefined)
-        {
-            myChart.destroy();
-            console.log("Destroyed previous chart");
-            $("#myChart").show();
-        }
+        canvas.attr("id", input);
 
-            var ctx = document.getElementById("myChart").getContext('2d');
+        var table = $("<tr>").append(name, close, "<br>").attr("val", input).addClass("chart");
+
+        var newRow = $("<tr>").append(canvas);
+
+
+        tbody.append(table, newRow);
+
+            var ctx = document.getElementById(input).getContext('2d');
             myChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -104,57 +110,38 @@ $(document).ready(function() {
     
             });
         }, 1);
-        console.log("Made chart");
-        $("#myChart").hide();
+
+        
+            var click = $(this).attr("val");
+
+            $("#" + click).hide();
+
+            console.log(click);
         });
 
-    $("#my-data").unbind().on("click", function(){
+        console.log("Made chart");
+
+    $(document).on("click", ".chart", function(){
 
         console.log("hey")
+        
+        var click = $(this).attr("val");
 
         if(!clicked){
+
+            $("#" + click).show();
+
             console.log(clicked);
-
-            $("#myChart").hide();
-            if (first > last){
-                $("#my-data").css("color", "red");
-            }
-            else if(first < last){
-                $("#my-data").css("color", "green");
-            }
-
-            for(var i = 1; i < 5; i++){
-                $("#news" + i).hide();
-            }
-            
-            $("#stock-name").show();
-            $("#current-price").show();
-
-            
-            
 
             clicked = true;
         }
         else if(clicked){
 
-            for(i = 1; i < 5; i++){
-                $("#news" + i).show();
-            }
-
-            console.log(clicked);
-
-            $("#my-data").css("background-color", "black");
-            $("#myChart").show();
+            $("#" + click).hide();
             
-
-            $("#stock-name").hide();
-            $("#current-price").hide();
-
             clicked = false;
         }
     });
-
-});
 
 function getNews(item){
 
@@ -167,16 +154,15 @@ function getNews(item){
       .then(function(response){
 
         for(i = 0; i < 5; i++){
-        var newsURL = response.articles[i].url;
+            var newsURL = response.articles[i].url;
+            var title = response.articles[i].title;
+            var date = response.articles[i].publishedAt.substr(0,10);
+            var author = response.articles[i].author;
+            
+            $("#news" + i).append('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+date+') '+'Author: '+author+'</a><br>');
         
-        $("#news" + i).append(newsURL);
-
-        $("#news" + i).hide();
-        }
-
-        $("#news0").show();
-        
-      });
+      };
+    });
 }
 
 });
