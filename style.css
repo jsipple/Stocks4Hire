@@ -1,8 +1,11 @@
 body {
-    background:url(../project1/images/background-picture.jpg);
-    background-size: cover;
+    background-image:url('images/market.gif');
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .jumbotron {
@@ -13,7 +16,7 @@ body {
 
 .card-header {
     background-color: black;
-    color: white;
+    color: #eace6a;
 }
 #logo {
     height: 150px;
