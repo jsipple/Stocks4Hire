@@ -4,11 +4,12 @@ $(document).ready(function() {
 
     let stockValue = []
 
-    var myChart
+    var myChart;
 
     var clicked = true;
 
     $("#add-button").on("click", function(event){
+        event.preventDefault();
 
         var first;
         var last;
@@ -16,10 +17,6 @@ $(document).ready(function() {
         date = []
 
         stockValue = []
-    
-        event.preventDefault();
-
-        $("#numbers").empty();
 
         var input = $("#user-input").val().trim()
 
@@ -35,6 +32,7 @@ $(document).ready(function() {
 
         getNews(response[input].quote.companyName);
 
+    setTimeout(function(){
         console.log(response);
         
         for(var i = 0; i < response[input].chart.length; i++){
@@ -51,11 +49,11 @@ $(document).ready(function() {
 
             if (first > last){
                 color = 'rgba(200, 0, 0, 1)'
-                $("#my-data").css("background-color", "red");
+                $("#my-data").css("color", "red");
             }
             else if(first < last){
                 color = 'rgba(0, 200, 0, 1)'
-                $("#my-data").css("background-color", "green");
+                $("#my-data").css("color", "green");
             }
 
         $("#stock-name").text("Stock: " + input);
@@ -65,9 +63,10 @@ $(document).ready(function() {
         if (myChart != undefined)
         {
             myChart.destroy();
+            console.log("Destroyed previous chart");
+            $("#myChart").show();
         }
 
-        setTimeout(function(){
             var ctx = document.getElementById("myChart").getContext('2d');
             myChart = new Chart(ctx, {
             type: 'line',
@@ -104,7 +103,8 @@ $(document).ready(function() {
             }
     
             });
-        }, 20);
+        }, 1);
+        console.log("Made chart");
         $("#myChart").hide();
         });
 
@@ -113,33 +113,44 @@ $(document).ready(function() {
         console.log("hey")
 
         if(!clicked){
+            console.log(clicked);
 
             $("#myChart").hide();
             if (first > last){
-                $("#my-data").css("background-color", "red");
+                $("#my-data").css("color", "red");
             }
             else if(first < last){
-                $("#my-data").css("background-color", "green");
+                $("#my-data").css("color", "green");
             }
 
-            $("#stock-name").show()
+            for(var i = 1; i < 5; i++){
+                $("#news" + i).hide();
+            }
+            
+            $("#stock-name").show();
             $("#current-price").show();
 
-            clicked = true;
+            
+            
 
-            return true;
+            clicked = true;
         }
         else if(clicked){
 
+            for(i = 1; i < 5; i++){
+                $("#news" + i).show();
+            }
+
+            console.log(clicked);
+
             $("#my-data").css("background-color", "black");
             $("#myChart").show();
+            
 
             $("#stock-name").hide();
             $("#current-price").hide();
 
             clicked = false;
-
-            return false;
         }
     });
 
@@ -147,7 +158,7 @@ $(document).ready(function() {
 
 function getNews(item){
 
-    var URL = 'https://newsapi.org/v2/everything?q=' + item + '&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
+    var URL = 'https://newsapi.org/v2/everything?q=' + item + 's&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
 
     $.ajax({
         url: URL,
@@ -155,9 +166,16 @@ function getNews(item){
       })
       .then(function(response){
 
-        console.log(response);
+        for(i = 0; i < 5; i++){
+        var newsURL = response.articles[i].url;
+        
+        $("#news" + i).append(newsURL);
 
-    
+        $("#news" + i).hide();
+        }
+
+        $("#news0").show();
+        
       });
 }
 

@@ -15,7 +15,6 @@
 <body>
     <div class="container">
         <a>Stock History:</a>
-        <div class="row">
 
              <form id="form">
 
@@ -27,15 +26,30 @@
         
             </form>
         
-            <div class="col-md-12" id="my-data">
-            
-                <a id="stock-name"></a>
-                <a id="current-price"></a>
-                <a id="news"></a>
+            <div class= "row" id="my-data">
 
-                <canvas id="myChart"></canvas>
+                <div class="col-6">
+
+                    <div class="row">
+            
+                        <a id="stock-name"></a>
+                        <a id="current-price"></a>
+
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+
+                    <div class="row">
+            
+                        <a id="news0"></a>
+                        <a id="news1"></a>
+                        <a id="news2"></a>
+                        <a id="news3"></a>
+                        <a id="news4"></a>
+                    </div>
+                </div>
             </div>
-        </div>
     </div>
 <script src="app.js"></script>
 </body>
