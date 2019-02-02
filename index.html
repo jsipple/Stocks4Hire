@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="en">
 
     <head>
@@ -19,34 +18,10 @@
 
     </head>
 
-        
-
     <body>
-
+            
         <body>
             <div class="container">
-        <!--Navigation bar-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">S4H</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-              
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Favorites</a>
-                    </li>
-                  </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Find me money!" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
-                  </form>
-                </div>
-              </nav>
                 <!-- Jumbotron -->
                 <div class="jumbotron">
                     <div class='flex-div'>
@@ -61,13 +36,21 @@
                      Sign In
                  </button></span>
                     </div>
+                    <div>
+                        <nav class="navbar navbar-light bg-light">
+                            <a class="navbar-brand">Navbar</a>
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form>
+                                  </nav>
                     </div>
-
+                    </div>
 
                 </div>
                 <div class="row mb-3">
                     <div class="col-lg-6">
-                        <div class="card card-default" id="stocksListed">
+                        <div class="card card-default">
                             <div class="card-header">
                                 Top 5 Stocks
                             </div>
@@ -85,7 +68,7 @@
                         </div>
                     </div>
                         <div class="col-lg-6">
-                        <div>
+                        <div class="card card-default">
                                 <div class="card-header">
                                         Financial News
                                     </div>
@@ -106,10 +89,15 @@
          
     <!-- keep track of last 5 stocks searched-->
         <div class="container" id="search-container">
+                <div class="card card-default">
             <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
+                </div>
         </div>
 
     <!--footer-->
+    <div class="footer">
+        
+    </div>    
 
     </div>
     </div>
@@ -120,39 +108,7 @@
     </div>
          
     </div>
-                </div float:left>
-                <div class="row mb-3">
-                    <div class="col-lg-12">
-                        <div class="card card-default" id="stocksListed">
-                            <div class="card-header">
-                                Top 5 Stocks
-                            </div>
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Stock Name</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="stockslisted">
 
-                                </tbody>
-                            </table>
-                        </div>   
-
-                        <div float:right>      
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Current News</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="newsArticles">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
 
                 <div class="row">
          
