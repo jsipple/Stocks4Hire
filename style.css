@@ -1,8 +1,11 @@
 body {
-    background:url(../project1/images/background-picture.jpg);
-    background-size: cover;
+    background-image:url('images/market.gif');
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .jumbotron {
@@ -13,7 +16,7 @@ body {
 
 .card-header {
     background-color: black;
-    color: white;
+    color: #eace6a;
 }
 #logo {
     height: 150px;
@@ -39,7 +42,6 @@ h2 {
     align-items: center;
 }
 
-<<<<<<< HEAD
 .chart{
     width: 40px;
     height: 20px;
@@ -49,17 +51,19 @@ h2 {
     float: right;
 } */
 
+#footer {
+    position: absolute;
+    bottom: 0;
+    line-height: 0.15em;
+    opacity: .75;
+}
 
 /* .container {
     height: 40vh;
     width: 50vw;
 } */
 
-
-
-=======
 a { 
     color: rgb(125, 168, 7); 
     text-decoration:none;
 }
->>>>>>> 5156d30d407a8513e054ef871667c866af604177

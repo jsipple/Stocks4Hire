@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 
     let date = []
@@ -116,6 +117,93 @@ $(document).ready(function() {
                             beginAtZero:false
                         }
                     }]
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
+    authDomain: "stocks-eeae4.firebaseapp.com",
+    databaseURL: "https://stocks-eeae4.firebaseio.com",
+    projectId: "stocks-eeae4",
+    storageBucket: "stocks-eeae4.appspot.com",
+    messagingSenderId: "623424739833"
+  };
+  firebase.initializeApp(config);
+
+let database = firebase.database();
+let auth = firebase.auth()
+// $("#signIn").on("click", function(event) {
+//     event.preventDefault()
+//     const email = $("#email").val().trim()
+//     const pass = $("#password").val().trim()
+//     const signIn = auth.signInWithEmailAndPassword(email,pass)
+//     signIn.catch(e => console.log(e.message))
+// })
+console.log('running')
+$("#signUp").on("click", function(event) {
+    console.log("test")
+    event.preventDefault();
+    email = $("#email").val().trim()
+    pass = $("#password").val().trim()
+    console.log("email")
+    const signUp = auth.createUserWithEmailAndPassword(email,pass)
+    signUp.catch(e => console.log(e.message))
+})
+
+auth.onAuthStateChanged(firebaseUser => {
+    if (firebaseUser) {
+        console.log(`user logged in`)
+    } else {
+        console.log(`user logged out`)
+    }
+})
+
+
+let API = "https://api.iextrading.com/1.0"
+let query = "/stock/aapl/chart"
+let date = 5
+// let yAxesMin;
+// let yAxesMax;
+let stockValue = []
+function getURL() {
+url = API + query
+$.get(url).then(function(obj) {
+
+    console.log(obj);
+
+    for (let i = 0; i < 20; i++) {
+    date.push(obj[i].date)
+    stockValue.push(obj[i].vwap)
+    // yAxesMin = Math.min(...stockValue) - 10
+    console.log(stockValue)
+    }
+}).catch( error => console.log(error))
+} 
+getURL()
+// chart need to make it so that it changes based on different click functions
+setTimeout(function() {
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: date,
+        datasets: [{
+            label: 'stock price',
+            data: stockValue,
+            backgroundColor: [
+                'rgba(0, 0, 0, 0.5)'
+            ],
+            borderColor: [
+                'rgba(0, 255, 0, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive:true,
+        maintainAspectRatio:true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
                 }
             }
     
@@ -180,6 +268,7 @@ function getNews(item){
 // when you click on a stock it dropsdown below(using bootstrap) and shows a graph with one month of stock data
 
 // when clicking the star icon next to the stock it will add it to the users favorites firebase
+
 // basic login page that will push user data to firebase or retrieve if already there
 
 // have a moment clock that lists the time until market closes update this every 60000ms(1min)
