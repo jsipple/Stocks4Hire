@@ -1,56 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Document</title>
 
- <link rel="stylesheet" href="style.css">
- <title>Document</title>
 </head>
+
+    
+
 <body>
-    <div class="container">
-        <a>Stock History:</a>
 
-             <form id="form">
+    <body>
+        <div class="container">
+    <!--Navigation bar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">S4H</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Favorites</a>
+                </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Find me money!" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
+              </form>
+            </div>
+          </nav>
+            <!-- Jumbotron -->
+            <div class="jumbotron">
+                <div class='flex-div'>
+                    <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
+                    <div>
+                    <h1>Stocks4Hire</h1>
+                    <h2>Saving your money for the fallout</h2>
+                </div>
+                </div>
 
-                <label for="user-input" value="Add a Sport"></label>
 
-                <input type="text" id="user-input">
-            
-                <input id="add-button" type="submit" value="Enter Company Symbol">
-        
-            </form>
-        
-            <div class= "row" id="my-data">
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-6">
+                    <div class="card card-default" id="stocksListed">
+                        <div class="card-header">
+                            Top 5 Stocks
+                        </div>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Stock Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockslisted">
 
-                <div class="col-6">
-
-                    <div class="row">
-            
-                        <a id="stock-name"></a>
-                        <a id="current-price"></a>
-
-                        <canvas id="myChart"></canvas>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="col-6">
+                    <div class="col-lg-6">
+                    <div>
+                            <div class="card-header">
+                                    Financial News
+                                </div>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Current News</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsArticles">
 
-                    <div class="row">
-            
-                        <a id="news0"></a>
-                        <a id="news1"></a>
-                        <a id="news2"></a>
-                        <a id="news3"></a>
-                        <a id="news4"></a>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+            <div class="row">
+     
+<!-- keep track of last 5 stocks searched-->
+    <div class="container" id="search-container">
+        <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
     </div>
+
+<!--footer-->
+
+</div>
+</div>
+</div>
+     
+     
+     
+</div>
+     
+</div>
 <script src="app.js"></script>
+    
+    <!-- <div class="container">
+        <canvas id="myChart" width="150" height="150" ></canvas>
+    </div> -->
+
+            
 </body>
 </html>
