@@ -41,11 +41,14 @@ h2 {
     justify-content: space-between;
     align-items: center;
 }
- 
-.navbar {
-    
-}
 
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    line-height: 0.15em;
+    opacity: .75;
+}
 
 /* .container {
     height: 40vh;
