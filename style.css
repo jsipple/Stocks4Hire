@@ -39,6 +39,15 @@ h2 {
     align-items: center;
 }
 
+#logout {
+    display:none;
+}
+#signInModal{
+    display: none;
+}
+#signUpModal{
+    display: none;
+}
 /* .navbar {
     float: right;
 } */

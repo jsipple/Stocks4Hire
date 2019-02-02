@@ -8,34 +8,91 @@ var config = {
     messagingSenderId: "623424739833"
   };
   firebase.initializeApp(config);
-
 let database = firebase.database();
 let auth = firebase.auth()
-// $("#signIn").on("click", function(event) {
-//     event.preventDefault()
-//     const email = $("#email").val().trim()
-//     const pass = $("#password").val().trim()
-//     const signIn = auth.signInWithEmailAndPassword(email,pass)
-//     signIn.catch(e => console.log(e.message))
-// })
-console.log('running')
+let user = auth.currentUser
+let username = null
+let x;
+
+
+$("#signIn").on("click", function(event) {
+    event.preventDefault()
+    const email = $("#email").val().trim()
+    const pass = $("#password").val().trim()
+    const signIn = auth.signInWithEmailAndPassword(email,pass)
+    signIn.catch(e => console.log(e.message))
+})
 $("#signUp").on("click", function(event) {
     console.log("test")
     event.preventDefault();
-    email = $("#email").val().trim()
-    pass = $("#password").val().trim()
-    console.log("email")
+    username = $("#entry-displayname").val().trim()
+    const email = $("#entry-email").val().trim()
+    const pass = $("#entry-password").val().trim()
+    console.log("entry-email")
+    console.log(username)
     const signUp = auth.createUserWithEmailAndPassword(email,pass)
     signUp.catch(e => console.log(e.message))
+    console.log(auth.currentUser)
 })
 
+
+
+//   if (user != null) {
+//     user.providerData.forEach(function (profile) {
+//       console.log("Sign-in provider: " + profile.providerId);
+//       console.log("  Provider-specific UID: " + profile.uid);
+//       console.log("  Name: " + profile.displayName);
+//       console.log("  Email: " + profile.email);
+//       console.log("  Photo URL: " + profile.photoURL);
+//     });
+//   }
+
+//   user.updateProfile({
+//     displayName: "Jane Q. User",
+//     photoURL: "https://example.com/jane-q-user/profile.jpg"
+//   }).then(function() {
+//     // Update successful.
+//   }).catch(function(error) {
+//     // An error happened.
+//   });
+
+$("#logoutBtn").on("click", function() {
+    auth.signOut()
+})
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
         console.log(`user logged in`)
+        $("#signUpModal").hide()
+        $("#signInModal").hide()
+        $("#logout").show()
+        if (username != null) {
+        auth.currentUser.updateProfile({
+            displayName: username,
+        })
+    }
+    // this isn't working
+    x = firebaseUser.displayName
+    $("#welcome").text(`Welcome ${firebaseUser.displayName}`)
     } else {
         console.log(`user logged out`)
+        $("#signUpModal").show()
+        $("#signInModal").show()
+        $("#logout").hide()
+        $("#welcome").empty()
     }
 })
+
+// below don't do anything let these will work with favorite icon to click and favorite dropdown
+$("#fav").on("click", function() {
+    database.ref('favorites/' + x).push({
+        favorite: $(this).val().trim()
+       });
+})
+
+let favorites = []
+    database.ref('favorites/' + x).on("child_added", function(snap) {
+        console.log(snap.val().favorite)
+    })
 
 
 let API = "https://api.iextrading.com/1.0"
@@ -110,4 +167,21 @@ var myChart = new Chart(ctx, {
 // when clicking home button will show the main page with the top 5 stocks again
 
 // add buttons above graph that will change timeframe
+
+// firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//       // User is signed in.
+//       var displayName = user.displayName;
+//       var email = user.email;
+//       var emailVerified = user.emailVerified;
+//       var photoURL = user.photoURL;
+//       var isAnonymous = user.isAnonymous;
+//       var uid = user.uid;
+//       var providerData = user.providerData;
+//       // ...
+//     } else {
+//       // User is signed out.
+//       // ...
+//     }
+//   });
 
