@@ -8,6 +8,18 @@ $(document).ready(function() {
 
     var clicked = true;
 
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyB7FoClUg_vFWCfyZLegDveIwcnbr3WIcs",
+        authDomain: "stocks4hire-488ef.firebaseapp.com",
+        databaseURL: "https://stocks4hire-488ef.firebaseio.com",
+        projectId: "stocks4hire-488ef",
+        storageBucket: "stocks4hire-488ef.appspot.com",
+        messagingSenderId: "233038305491"
+    };
+    firebase.initializeApp(config);
+    
+
     $("#add-button").on("click", function(event){
         event.preventDefault();
 
@@ -33,8 +45,7 @@ $(document).ready(function() {
         getNews(response[input].quote.companyName);
 
     setTimeout(function(){
-        console.log(response);
-        
+            
         for(var i = 0; i < response[input].chart.length; i++){
 
             stockValue.push(response[input].chart[i].close);
@@ -63,7 +74,7 @@ $(document).ready(function() {
         if (myChart != undefined)
         {
             myChart.destroy();
-            console.log("Destroyed previous chart");
+            
             $("#myChart").show();
         }
 
@@ -104,16 +115,13 @@ $(document).ready(function() {
     
             });
         }, 1);
-        console.log("Made chart");
+        
         $("#myChart").hide();
         });
 
     $("#my-data").unbind().on("click", function(){
 
-        console.log("hey")
-
         if(!clicked){
-            console.log(clicked);
 
             $("#myChart").hide();
             if (first > last){
@@ -141,8 +149,6 @@ $(document).ready(function() {
                 $("#news" + i).show();
             }
 
-            console.log(clicked);
-
             $("#my-data").css("background-color", "black");
             $("#myChart").show();
             
@@ -165,11 +171,14 @@ function getNews(item){
         method: "GET"
       })
       .then(function(response){
-
+        
         for(i = 0; i < 5; i++){
         var newsURL = response.articles[i].url;
+        var title = response.articles[i].title;
+        var date = response.articles[i].publishedAt.substr(0,10);
+        var author = response.articles[i].author;
         
-        $("#news" + i).append(newsURL);
+        $("#news" + i).append('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+date+') '+'Author: '+author+'</a><br>');
 
         $("#news" + i).hide();
         }
