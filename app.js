@@ -8,15 +8,6 @@ $(document).ready(function() {
     var clicked = true;
 
     // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyB7FoClUg_vFWCfyZLegDveIwcnbr3WIcs",
-        authDomain: "stocks4hire-488ef.firebaseapp.com",
-        databaseURL: "https://stocks4hire-488ef.firebaseio.com",
-        projectId: "stocks4hire-488ef",
-        storageBucket: "stocks4hire-488ef.appspot.com",
-        messagingSenderId: "233038305491"
-    };
-    firebase.initializeApp(config);
     
 
     $("#add-button").on("click", function(event){
@@ -56,7 +47,6 @@ $(document).ready(function() {
 
         first = stockValue[0];
         last = stockValue[20];
-
         var color;
 
             if (first > last){
@@ -69,14 +59,28 @@ $(document).ready(function() {
             }
 
         var tbody = $("#stockslisted");
-        
+        // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
         var close = $("<td>").text("$" + response[input].chart[20].close);
         var canvas = $("<canvas>");
-
+        // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
+        let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
+            $(this).toggleClass("fa-star-o fa-star")
+            // alternating but toggle class not working because adding if i do opposite just taking out
+            console.log($(this).parent(".chart").attr("id"))
+            if ($(this).hasClass("fa-star")) {
+                console.log("a")
+                // this is keeping the star colored when refreshed seems to always have it stared
+                // below grabs the value of the chart and that would grab the search term
+                console.log($(this).parent(".chart").val())
+                database.ref('favorites/' + x).push({
+                    favorite: $(this).parent(".chart").attr("id")
+                   });
+            }
+        })
         canvas.attr("id", input).hide();
 
-        var table = $("<tr>").append(name, close, "<br>").attr("val", input).addClass("chart");
+        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("id", input)
 
         var newRow = $("<tr>").append(canvas);
 
@@ -119,8 +123,6 @@ $(document).ready(function() {
             }
         });
         $(document).unbind().on("click", ".chart", function(){
-
-            console.log("hey")
             
             var click = $(this).attr("val");
     
@@ -157,14 +159,14 @@ $(document).ready(function() {
             for(i = 0; i < 5; i++){
                 var newsURL = response.articles[i].url;
                 var title = response.articles[i].title;
-                var date = response.articles[i].publishedAt.substr(0,10);
+                var dates = response.articles[i].publishedAt.substr(0,10);
                 var author = response.articles[i].author;
-                
+                // what does this do? seems to be looking to replace the first if it starts with a letter with nothing but theres thi g for some reason
                 var itemval=item.replace(/[^a-zA-Z ]/g, "").split(" ").join("");
                 
                 var tbody = $("#newsArticles");
                 var name = $("<td>").text('Click here for latest news for '+item);
-                var newslink = $("<td>").html('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+date+') '+'Author: '+author+'</a>');
+                var newslink = $("<td>").html('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+dates+') '+'Author: '+author+'</a>');
                 var mainrow = $("<tr>").append(name, "<br>").attr("val", itemval).addClass("newslinks");
                 
                 var table = $("<tr class="+itemval+">").append(newslink, "<br>");
@@ -361,39 +363,51 @@ auth.onAuthStateChanged(firebaseUser => {
 })
 
 // below don't do anything let these will work with favorite icon to click and favorite dropdown
-$("#fav").on("click", function() {
-    database.ref('favorites/' + x).push({
-        favorite: $(this).val().trim()
-       });
-})
+
 
 let favorites = []
     database.ref('favorites/' + x).on("child_added", function(snap) {
         console.log(snap.val().favorite)
     })
+// database.ref('favorites/' + x).on("child_added", function() {
 
+// })
+    // toggles the filled in star
+// $("i").on("click", function() {
+//     $(this).toggleClass("fa-star-o", "fa-star")
+//     // doesn't seem to be working on the ones i'm putting on stocks
+//     console.log("b")
+//     if ($(this).hasClass("fa-star")) {
+//         console.log("a")
+//         // this is keeping the star colored when refreshed seems to always have it stared
+//         // below grabs the value of the chart and that would grab the search term
+//         console.log($(this).parent(".btn").val())
+//         database.ref('favorites/' + x).push({
+//             favorite: $(this).parent(".chart").val()
+//            });
+//     }
+// })
+// let API = "https://api.iextrading.com/1.0"
+// let query = "/stock/aapl/chart"
+// let date = 5
+// // let yAxesMin;
+// // let yAxesMax;
+// let stockValue = []
+// function getURL() {
+// url = API + query
+// $.get(url).then(function(obj) {
 
-let API = "https://api.iextrading.com/1.0"
-let query = "/stock/aapl/chart"
-let date = 5
-// let yAxesMin;
-// let yAxesMax;
-let stockValue = []
-function getURL() {
-url = API + query
-$.get(url).then(function(obj) {
+//     console.log(obj);
 
-    console.log(obj);
-
-    for (let i = 0; i < 20; i++) {
-    date.push(obj[i].date)
-    stockValue.push(obj[i].vwap)
-    // yAxesMin = Math.min(...stockValue) - 10
-    console.log(stockValue)
-    }
-}).catch( error => console.log(error))
-} 
-getURL()
+//     for (let i = 0; i < 20; i++) {
+//     date.push(obj[i].date)
+//     stockValue.push(obj[i].vwap)
+//     // yAxesMin = Math.min(...stockValue) - 10
+//     console.log(stockValue)
+//     }
+// }).catch( error => console.log(error))
+// } 
+// getURL()
 // chart need to make it so that it changes based on different click functions
 // var config = {
 //     apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",

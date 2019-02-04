@@ -80,3 +80,6 @@ a {
     font-weight: bold;
 }
 
+.dropdown-toggle {
+    border: 1px red solid
+}
