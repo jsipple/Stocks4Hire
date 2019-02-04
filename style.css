@@ -43,6 +43,19 @@ h2 {
 }
 
 
+#logout {
+    display:none;
+}
+#signInModal{
+    display: none;
+}
+#signUpModal{
+    display: none;
+}
+/* .navbar {
+    float: right;
+} */
+
 
 #footer {
     position: absolute;

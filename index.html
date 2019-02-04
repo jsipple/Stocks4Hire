@@ -22,6 +22,38 @@
     
 
 
+        <body>
+            <div class="container">
+                <!-- Jumbotron -->
+                <div class="jumbotron">
+                    <div class='flex-div'>
+                        <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
+                        <div>
+                        <h1>Stocks4Hire</h1>
+                        <h2>Saving your money for the fallout</h2>
+                        <span id="signUpModal">
+                        <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3" data-toggle="modal" data-target="#signupModal">
+                     Sign Up
+                 </button></span>
+                 <span id="signInModal"><button type="button" id="signinmodal-btn" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
+                     Sign In
+                 </button></span>
+                 <span id="logout"><button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
+                    logout
+                </button></span>
+                 <div id="welcome"></div>
+                    </div>
+                    </div>
+                <!--Navigation bar-->
+                <!-- <div class="nav-bar">
+                        <nav class="navbar navbar-light bg-light">
+                            <a class="navbar-brand">Navbar</a>
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Find Stocks" aria-label="Search">
+                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
+                                </form>
+                                  </nav>
+                    </div> -->
 
     <body>
         <div class="container">
@@ -103,23 +135,70 @@
         <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
     </div>
 
-<!--footer-->
-
-</div>
-</div>
-</div>
-     
-     
-     
-</div>
-     
-</div>
-<script src="app.js"></script>
-    
-    <!-- <div class="container">
-        <canvas id="myChart" width="150" height="150" ></canvas>
-    </div> -->
-
-            
-</body>
+        
+        <!-- <div class="container">
+            <canvas id="myChart" width="150" height="150" ></canvas>
+        </div> -->
+        <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h4 class="modal-title" id="signupModalLabel">Login</h4>
+                     <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                 </div>
+                 <div class="modal-body">
+                     <!-- <form id="form" name="form" action=""> -->
+                         <div class="form-group">
+                             <label for="entry-displayname">Display Name</label>
+                             <input type="text" id="entry-displayname" placeHolder="Display Name" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="entry-email">Email</label>
+                             <input type="email" id="entry-email" placeHolder="user@email.com" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="entry-password">Password</label>
+                             <input type="password" id="entry-password" placeHolder="password" class="form-control">
+                         </div>
+                     <!-- </form> -->
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" form="form" id="signUp" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
+                     <button class="btn btn-primary" data-dismiss="modal" >Close</button>
+                 </div>
+             </div>
+         </div>
+         </div>
+         <!-- modal for sign in -->
+         <div class="modal" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true">
+             <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h4 class="modal-title" id="signinModalLabel">Login</h4>
+                         <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                     </div>
+                     <div class="modal-body">
+                         <form id="form" name="form" action="">
+                             <div class="form-group">
+                                 <label for="entry-email">Email</label>
+                                 <input type="email" id="email" placeHolder="user@email.com" class="form-control">
+                             </div>
+                             <div class="form-group">
+                                 <label for="password">Password</label>
+                                 <input type="password" id="password" placeHolder="password" class="form-control">
+                             </div>
+                         </form>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="submit" form="form" id ="signIn" class="btn btn-primary">Login</button>
+                         <button class="btn btn-primary" data-dismiss="modal" >Close</button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         </div>
+                
+    </body>
+    <script src="app.js"></script>
 </html>
+
