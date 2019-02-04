@@ -2,7 +2,7 @@
 $(document).ready(function() {
 
     let date = []
-
+    let favoriteId;
     let stockValue = []
 
     var clicked = true;
@@ -67,20 +67,20 @@ $(document).ready(function() {
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
             $(this).toggleClass("fa-star-o fa-star")
             // alternating but toggle class not working because adding if i do opposite just taking out
-            console.log($(this).parent(".chart").attr("id"))
+            favoriteId = $(this).parent(".chart").attr("value")
             if ($(this).hasClass("fa-star")) {
                 console.log("a")
                 // this is keeping the star colored when refreshed seems to always have it stared
                 // below grabs the value of the chart and that would grab the search term
-                console.log($(this).parent(".chart").val())
+                console.log($(this).parent(".chart").attr("value"))
                 database.ref('favorites/' + x).push({
-                    favorite: $(this).parent(".chart").attr("id")
+                    favorite: $(this).parent(".chart").attr("value")
                    });
             }
         })
         canvas.attr("id", input).hide();
-
-        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("id", input)
+// me adding the id here causes the graph not to appear
+        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
         var newRow = $("<tr>").append(canvas);
 
@@ -362,125 +362,8 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 })
 
-// below don't do anything let these will work with favorite icon to click and favorite dropdown
+database.ref('favorites/' + x).on("value", function(snap) {
+    console.log(snap.val())
+})
 
-
-let favorites = []
-    database.ref('favorites/' + x).on("child_added", function(snap) {
-        console.log(snap.val().favorite)
-    })
-// database.ref('favorites/' + x).on("child_added", function() {
-
-// })
-    // toggles the filled in star
-// $("i").on("click", function() {
-//     $(this).toggleClass("fa-star-o", "fa-star")
-//     // doesn't seem to be working on the ones i'm putting on stocks
-//     console.log("b")
-//     if ($(this).hasClass("fa-star")) {
-//         console.log("a")
-//         // this is keeping the star colored when refreshed seems to always have it stared
-//         // below grabs the value of the chart and that would grab the search term
-//         console.log($(this).parent(".btn").val())
-//         database.ref('favorites/' + x).push({
-//             favorite: $(this).parent(".chart").val()
-//            });
-//     }
-// })
-// let API = "https://api.iextrading.com/1.0"
-// let query = "/stock/aapl/chart"
-// let date = 5
-// // let yAxesMin;
-// // let yAxesMax;
-// let stockValue = []
-// function getURL() {
-// url = API + query
-// $.get(url).then(function(obj) {
-
-//     console.log(obj);
-
-//     for (let i = 0; i < 20; i++) {
-//     date.push(obj[i].date)
-//     stockValue.push(obj[i].vwap)
-//     // yAxesMin = Math.min(...stockValue) - 10
-//     console.log(stockValue)
-//     }
-// }).catch( error => console.log(error))
-// } 
-// getURL()
-// chart need to make it so that it changes based on different click functions
-// var config = {
-//     apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
-//     authDomain: "stocks-eeae4.firebaseapp.com",
-//     databaseURL: "https://stocks-eeae4.firebaseio.com",
-//     projectId: "stocks-eeae4",
-//     storageBucket: "stocks-eeae4.appspot.com",
-//     messagingSenderId: "623424739833"
-//   };
-//   firebase.initializeApp(config);
-
-// let database = firebase.database();
-// let auth = firebase.auth()
-// $("#signIn").on("click", function(event) {
-//     event.preventDefault()
-//     const email = $("#email").val().trim()
-//     const pass = $("#password").val().trim()
-//     const signIn = auth.signInWithEmailAndPassword(email,pass)
-//     signIn.catch(e => console.log(e.message))
-// })
-// console.log('running')
-// $("#signUp").on("click", function(event) {
-//     console.log("test")
-//     event.preventDefault();
-//     email = $("#email").val().trim()
-//     pass = $("#password").val().trim()
-//     console.log("email")
-//     const signUp = auth.createUserWithEmailAndPassword(email,pass)
-//     signUp.catch(e => console.log(e.message))
-// })
-
-// auth.onAuthStateChanged(firebaseUser => {
-//     if (firebaseUser) {
-//         console.log(`user logged in`)
-//     } else {
-//         console.log(`user logged out`)
-//     }
-// })
-
-// when you click on a stock it dropsdown below(using bootstrap) and shows a graph with one month of stock data
-
-// when clicking the star icon next to the stock it will add it to the users favorites firebase
-
-// basic login page that will push user data to firebase or retrieve if already there
-
-// have a moment clock that lists the time until market closes update this every 60000ms(1min)
-
-// pull top 5 news stories from financial times when document loads and put in news div
-
-// when you click on stock it will change the news to search for that company name and show the top five results
-
-// when you type in a company to search it will show results and then prepend them to the stock div where you can click to show graph and news stories and will add it to the users firebase to show at the div recent searches
-
-// if error on search pull up modal that states error company cannot be found
-
-// when clicking home button will show the main page with the top 5 stocks again
-
-// add buttons above graph that will change timeframe
-
-// firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//       // User is signed in.
-//       var displayName = user.displayName;
-//       var email = user.email;
-//       var emailVerified = user.emailVerified;
-//       var photoURL = user.photoURL;
-//       var isAnonymous = user.isAnonymous;
-//       var uid = user.uid;
-//       var providerData = user.providerData;
-//       // ...
-//     } else {
-//       // User is signed out.
-//       // ...
-//     }
-//   });
 });
