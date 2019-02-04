@@ -56,5 +56,14 @@ h2 {
     width: 50vw;
 } */
 
+a { 
+    color: rgb(240, 245, 226); 
+    text-decoration:none;
+    
+}
 
+.newslinks,.txtcol{
+    color: rgb(240, 245, 226);
+    font-weight: bold;
+}
 
