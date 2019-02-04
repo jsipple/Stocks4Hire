@@ -64,6 +64,12 @@ h2 {
 } */
 
 a { 
-    color: rgb(125, 168, 7); 
+    color: rgb(240, 245, 226); 
     text-decoration:none;
+    
+}
+
+.newslinks,.txtcol{
+    color: rgb(240, 245, 226);
+    font-weight: bold;
 }
