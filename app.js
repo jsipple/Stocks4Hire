@@ -1,26 +1,35 @@
-
 $(document).ready(function() {
-
+    var config = {
+        apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
+        authDomain: "stocks-eeae4.firebaseapp.com",
+        databaseURL: "https://stocks-eeae4.firebaseio.com",
+        projectId: "stocks-eeae4",
+        storageBucket: "stocks-eeae4.appspot.com",
+        messagingSenderId: "623424739833"
+      };
+      firebase.initializeApp(config);
+    let database = firebase.database();
+    let auth = firebase.auth()
+    let username = null
+    let x;
+    let remove;
     let date = []
     let favoriteId;
     let stockValue = []
-
+    let user;
+    let aoeu;
+    let keys5
     var clicked = true;
-
+    let favArr = []
+    let sArr = [];
     // Initialize Firebase
-    
-
-    $("#add-button").on("click", function(event){
-        event.preventDefault();
-
+    function stock(input){
         var first;
         var last;
 
         date = []
 
         stockValue = []
-
-        var input = $("#user-input").val().trim()
 
         console.log(input);
 
@@ -61,24 +70,59 @@ $(document).ready(function() {
         var tbody = $("#stockslisted");
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
-        var close = $("<td>").text("$" + response[input].chart[20].close);
+        var close = $("<td>").text("$" + response[input].chart[19].close);
         var canvas = $("<canvas>");
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
+
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
             $(this).toggleClass("fa-star-o fa-star")
             // alternating but toggle class not working because adding if i do opposite just taking out
             favoriteId = $(this).parent(".chart").attr("value")
             if ($(this).hasClass("fa-star")) {
-                console.log("a")
                 // this is keeping the star colored when refreshed seems to always have it stared
                 // below grabs the value of the chart and that would grab the search term
-                console.log($(this).parent(".chart").attr("value"))
                 database.ref('favorites/' + x).push({
                     favorite: $(this).parent(".chart").attr("value")
                    });
             }
+          
+            if ($(this).hasClass("fa-star-o")) {
+                // gets company code
+                // maybe make this do a .once
+                database.ref("favorites/" + x).once("value", function(snap) {
+                    let ack = snap.val()
+                    let key1 = Object.keys(ack)
+                    for (let j = 0; j < key1.length; j++) {
+                        let k1 = key1[j]
+                        let rFav = ack[k1].favorite
+                        if (favoriteId == rFav) {
+                            database.ref("favorites/" + x).child(k1).set({
+                                favorite: null
+                            })
+                        }
+                    }
+                })
+            }
+            database.ref("favorites/").on("child_added", function(snap) {
+                // this is doing for all users need to make user specific
+                let favoriteArr = []
+                let ab = snap.val()
+                let keys = Object.keys(ab)
+                console.log(keys);
+                for (let i = 0; i < keys.length; i++) {
+                    let k = keys[i]
+                    let fav = ab[k].favorite
+                    favoriteArr.push(fav) 
+                }
+                favArr = [...favoriteArr]
+                console.log(favArr)
+                favoriteArr = []
+            });
         })
         canvas.attr("id", input).hide();
+        if (favArr.indexOf(input) != -1) {
+            favoriteIcon.toggleClass("fa-star-o fa-star")
+        }
 // me adding the id here causes the graph not to appear
         var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
@@ -194,9 +238,42 @@ $(document).ready(function() {
 
     });
 
-    });
+    };
 
 
+    $("#add-button").on("click", function(event) {
+        event.preventDefault()
+        stock($("#user-input").val().trim())
+        // need to add storing for the users recent searches then can make a similar click or just append below
+        database.ref('search/' + x).push({
+            searches: $("#user-input").val().trim()
+           });
+    })
+    database.ref("search/").on("child_added", function(snap) {
+        // this is doing for all users need to make user specific
+        let searchArr = []
+        let obj = snap.val()
+        let keys3 = Object.keys(obj)
+        console.log(keys3)
+        for (let m = 0; m < keys3.length; m++) {
+            let ke = keys3[m]
+            let searched = obj[ke].searches
+            $("#searches").append(stock(searched))
+            searchArr.push(searched)
+        }
+        sArr = [...searchArr]
+        console.log(sArr)
+        searchArr = []
+    })
+
+    $("#favs").on("click", function(event) {
+        event.preventDefault()
+        $(".chart").empty()
+        $("#stock").text("Favorites")
+        for (let b = 0; b < favArr.length; b++) {
+            stock(favArr[b])
+        }
+    })
     ////Market close/open TIMER
     var tday =moment('15:30', 'HH:mm');
     var minAway=tday.diff(moment(),"s");
@@ -256,9 +333,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=" , 0";
+        var delim=" : 0";
     }else{
-        var delim=" , "; 
+        var delim=" : "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -266,7 +343,7 @@ $(document).ready(function() {
         var hdelim=" "; 
     }
 
-        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' hrs '+delim+minutesQ+' mins'); }
+        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hours '+delim+minutesQ+' Minutes'); }
         
         if (distanceQ < 0 ) {
             clearInterval(y);
@@ -279,20 +356,7 @@ $(document).ready(function() {
 
 
 // Initialize Firebase
-var config = {
-    apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
-    authDomain: "stocks-eeae4.firebaseapp.com",
-    databaseURL: "https://stocks-eeae4.firebaseio.com",
-    projectId: "stocks-eeae4",
-    storageBucket: "stocks-eeae4.appspot.com",
-    messagingSenderId: "623424739833"
-  };
-  firebase.initializeApp(config);
-let database = firebase.database();
-let auth = firebase.auth()
-let user = auth.currentUser
-let username = null
-let x;
+
 
 
 $("#signIn").on("click", function(event) {
@@ -303,16 +367,12 @@ $("#signIn").on("click", function(event) {
     signIn.catch(e => console.log(e.message))
 })
 $("#signUp").on("click", function(event) {
-    console.log("test")
     event.preventDefault();
     username = $("#entry-displayname").val().trim()
     const email = $("#entry-email").val().trim()
     const pass = $("#entry-password").val().trim()
-    console.log("entry-email")
-    console.log(username)
     const signUp = auth.createUserWithEmailAndPassword(email,pass)
     signUp.catch(e => console.log(e.message))
-    console.log(auth.currentUser)
 })
 
 
@@ -338,6 +398,8 @@ $("#signUp").on("click", function(event) {
 
 $("#logoutBtn").on("click", function() {
     auth.signOut()
+    $(".chart").empty()
+    favArr = []
 })
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
@@ -362,8 +424,23 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 })
 
-database.ref('favorites/' + x).on("value", function(snap) {
-    console.log(snap.val())
-})
+// reminder to clean up the variables here
+database.ref().on("child_added", function(snap) {
+    if (x != undefined) {
+    let ab = snap.val()
+    let keys = Object.keys(ab)
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i] == x) {
+            aoeu = ab[keys[i]]
+            keys5= Object.keys(aoeu)
+            for (j = 0; j < keys5.length; j++) {
+            let k = keys5[j]
+            let fav = aoeu[k].favorite
+            favArr.push(fav)
+            }
+        }
+    }
+}
+});
 
 });

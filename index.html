@@ -2,188 +2,219 @@
 
 <html lang="en">
 
-    <head>
+<head>
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-        <link rel="stylesheet" type="text/css" media="screen" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-            <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="style.css">
-        <title>Stocks4Hire</title>
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
 
-    <body>
-        <div class="container">
-            <!--Navigation bar-->
-            <nav class="navbar navbar-expand navbar-expand-sm navbar-expand-md navbar-expand-lg navbar-expand-xl navbarstyling"> 
-                <!-- <a class="navbar-brand" href="#">S4H</a> -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <title>S4H</title>
+    <link rel="icon" href="..//project1/images/s4h logo.PNG"/>
+ 
+</head>
+<body>  
+    <!--Navigation bar-->
+    
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: black;">
+            <a class="navbar-brand" style="color:#eace6a" href="#">S4H</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" style="color:#eace6a" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                        <div class="btn-group">
+                            <button id="favs" class="btn btn-primary">Favorites</button>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                              </div>
+                </li>
+              </ul>
+              <button type="button" class="btn btn-default btn-lg" value="hey">
                 </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link colbold" href="#">Home <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                    <div class="btn-group">
-                                            <button type="button" class="btn dropdown-toggle btncol" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Favorites
-                                            </button>
-                                            <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Separated link</a>
-                                            </div>
-                                        </div>
-                            </li>
-                        </ul>
-        
-                        <button type="button" class="btn btn-default btn-lg colbold" value="hey">
-                            <i class="fa fa-star" style="color:rgb(231, 65, 23)"></i> Star
-                        </button>
-                        <form class="form-inline my-2 my-lg-0">
-                            <input id="user-input" class="form-control mr-sm-2" type="search" placeholder="Enter Stock Symbol" aria-label="Search">
-                            <button id="add-button" class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
-                        </form>
-                    </div>
-            
-            </nav>
-                
-            <!-- Jumbotron -->
+              <form class="form-inline my-2 my-lg-0">
+                <input id="user-input" class="form-control mr-sm-2" type="search" placeholder="Enter Ticker Symbol" aria-label="Search">
+                <button id="add-button" class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
+              </form>
+            </div>
+    </nav>
+         
+
+<div class="container">
+        <!-- Jumbotron -->
             <div class="jumbotron">
                 <div class='flex-div'>
                     <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
                     <div>
-                        <h1>Stocks4Hire</h1>
-                        <h2>Saving your money for the fallout</h2>
-                        <span id="signUpModal">
-                            <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3 btncol" data-toggle="modal" data-target="#signupModal">
-                                Sign Up
-                            </button>
-                        </span>
-                        <span id="signInModal">
-                            <button type="button" id="signinmodal-btn" class="btn btn-primary  btncol" data-toggle="modal" data-target="#signinModal">
-                                Sign In
-                            </button>
-                        </span>
-                        <span id="logout">
-                            <button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
-                                logout
-                            </button>
-                        </span>
-                        <div id="welcome"></div>
+                    <h1>Stocks4Hire</h1>
+                    <h2>Saving your money for the fallout</h2>
+                    <span id="signUpModal">
+                    <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3" data-toggle="modal" data-target="#signupModal">
+                        Sign Up
+                            </button></span>
+                            <span id="signInModal"><button type="button" id="signinmodal-btn" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
+                        Sign In
+                            </button></span>
+                            <span id="logout"><button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
+                        Logout
+                            </button></span>
+                                <div id="Welcome"></div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-lg-6">
-                        <div class="card card-default"> <!-- id="stocksListed"> -->
-                            <div class="card-header">
-                                Top 5 Stocks
-                                <div id="favorites"></div>
-                            </div>
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Stock Name</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="stockslisted">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card-header" id="marketTimer">
-                            Financial News
+            <div class="row mb-3">
+                <div class="col-lg-6">
+                    <div class="card card-default" id="stocksListed">
+                        <div class="card-header" id="stock">
+                            Top 5 Stocks
+                            <div id="favorites"></div>
                         </div>
                         <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Stock Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockslisted">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <div class="col-lg-6">
+                    <div>
+                            <div class="card-header" id="marketTimer">
+                                    Financial News
+                                </div>
+                        <table class="table table-striped table-hover" id="Current-new-table">
                             <thead>
                                 <tr>
                                     <th class='txtcol'>Current News</th>
                                 </tr>
                             </thead>
-                            <tbody id="newsArticles">
+                            <tbody id="newsArticles" >
+
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <!-- keep track of last 5 stocks searched-->
-                        <div id="search-container">
-                            <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
-                        </div>
-                        <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="signupModalLabel">Login</h4>
-                                        <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="entry-displayname">Display Name</label>
-                                            <input type="text" id="entry-displayname" placeHolder="Display Name" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="entry-email">Email</label>
-                                            <input type="email" id="entry-email" placeHolder="user@email.com" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="entry-password">Password</label>
-                                            <input type="password" id="entry-password" placeHolder="password" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" form="form" id="signUp" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
-                                        <button class="btn btn-primary" data-dismiss="modal" >Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- modal for sign in -->
-                        <div class="modal" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="signinModalLabel">Login</h4>
-                                        <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="form" name="form" action="">
-                                            <div class="form-group">
-                                                <label for="entry-email">Email</label>
-                                                <input type="email" id="email" placeHolder="user@email.com" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="password" id="password" placeHolder="password" class="form-control">
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" form="form" id ="signIn" class="btn btn-primary">Login</button>
-                                        <button class="btn btn-primary" data-dismiss="modal" >Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        <!--end of jumbotron div-->
+        </div>
+
+            <!-- <div class="row">
+        </div> -->
+        <!-- <div class="container">
+            <canvas id="myChart" width="150" height="150" ></canvas>
+        </div> -->
+        
+        <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h4 class="modal-title" id="signupModalLabel">Login</h4>
+                     <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                 </div>
+                 <div class="modal-body">
+        <!-- <form id="form" name="form" action=""> -->
+                         <div class="form-group">
+                             <label for="entry-displayname">Display Name</label>
+                             <input type="text" id="entry-displayname" placeHolder="Display Name" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="entry-email">Email</label>
+                             <input type="email" id="entry-email" placeHolder="user@email.com" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="entry-password">Password</label>
+                             <input type="password" id="entry-password" placeHolder="password" class="form-control">
+                         </div>
+                     
+                    <!-- </form> -->
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" form="form" id="signUp" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
+                     <button class="btn btn-primary" data-dismiss="modal" >Close</button>
+                 </div>
+             </div>
+         </div>
+        </div>5
+
+         <!-- modal for sign in -->
+         <div class="modal" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true">
+             <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h4 class="modal-title" id="signinModalLabel">Login</h4>
+                         <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                     </div>
+                     <div class="modal-body">
+                         <form id="form" name="form" action="">
+                             <div class="form-group">
+                                 <label for="entry-email">Email</label>
+                                 <input type="email" id="email" placeHolder="user@email.com" class="form-control">
+                             </div>
+                             <div class="form-group">
+                                 <label for="password">Password</label>
+                                 <input type="password" id="password" placeHolder="password" class="form-control">
+                             </div>
+                         </form>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="submit" form="form" id ="signIn" class="btn btn-primary">Login</button>
+                         <button class="btn btn-primary" data-dismiss="modal" >Close</button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+    <!-- keep track of last 5 stocks searched-->
+        <!-- <div class="container" id="search-container">
+                <div class="card card-default">
+                    <div class="card-header" id="searches">Recent Searches</div>
+                </div>
+        </div> -->
+        <!-- removed: <i class="fa fa-table" aria-hidden="true"></i> check to make sure this is okay -->
+    <!--end of search div-->
+   
+     <!--end container-->
+    </div>   
+    <!--footer-->
+<footer>
+    <div id="footer">
+            <div class="card card-default">
+                <div class="card-header" id="searches">
+                    <h2>Stocks4Hire</h2>
+                    <h4>Contact Us</h4>
+                    <p>Hilton Garden Inn</p>
+                    <p>1500 RDU Center Drive, Cary NC</p>
+                    <p>919-867-5309</p>
                 </div>
             </div>
-        </div>            
-    </body>
-    <script src="app.js"></script>
+    </div>
+</footer>
+    <!--end of footer div-->
+
+
+
+</body>
+
+<script src="app.js"></script>
 </html>
 
