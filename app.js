@@ -1,4 +1,17 @@
 $(document).ready(function() {
+    var config = {
+        apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
+        authDomain: "stocks-eeae4.firebaseapp.com",
+        databaseURL: "https://stocks-eeae4.firebaseio.com",
+        projectId: "stocks-eeae4",
+        storageBucket: "stocks-eeae4.appspot.com",
+        messagingSenderId: "623424739833"
+      };
+      firebase.initializeApp(config);
+    let database = firebase.database();
+    let auth = firebase.auth()
+    let username = null
+    let x;
     let remove;
     let date = []
     let favoriteId;
@@ -8,6 +21,7 @@ $(document).ready(function() {
     let keys5
     var clicked = true;
     let favArr = []
+    let sArr = [];
     // Initialize Firebase
     function stock(input){
         var first;
@@ -88,7 +102,6 @@ $(document).ready(function() {
                         }
                     }
                 })
-                // .removeValue($(this).parent(".chart").attr("value"))
             }
             database.ref("favorites/").on("child_added", function(snap) {
                 // this is doing for all users need to make user specific
@@ -231,6 +244,26 @@ $(document).ready(function() {
     $("#add-button").on("click", function(event) {
         event.preventDefault()
         stock($("#user-input").val().trim())
+        // need to add storing for the users recent searches then can make a similar click or just append below
+        database.ref('search/' + x).push({
+            searches: $("#user-input").val().trim()
+           });
+    })
+    database.ref("search/").on("child_added", function(snap) {
+        // this is doing for all users need to make user specific
+        let searchArr = []
+        let obj = snap.val()
+        let keys3 = Object.keys(obj)
+        console.log(keys3)
+        for (let m = 0; m < keys3.length; m++) {
+            let ke = keys3[m]
+            let searched = obj[ke].searches
+            $("#searches").append(stock(searched))
+            searchArr.push(searched)
+        }
+        sArr = [...searchArr]
+        console.log(sArr)
+        searchArr = []
     })
 
     $("#favs").on("click", function(event) {
@@ -323,19 +356,7 @@ $(document).ready(function() {
 
 
 // Initialize Firebase
-var config = {
-    apiKey: "AIzaSyDfQP6TQSTiLKBpE16fqOd_JDx-xfCS55g",
-    authDomain: "stocks-eeae4.firebaseapp.com",
-    databaseURL: "https://stocks-eeae4.firebaseio.com",
-    projectId: "stocks-eeae4",
-    storageBucket: "stocks-eeae4.appspot.com",
-    messagingSenderId: "623424739833"
-  };
-  firebase.initializeApp(config);
-let database = firebase.database();
-let auth = firebase.auth()
-let username = null
-let x;
+
 
 
 $("#signIn").on("click", function(event) {
@@ -403,7 +424,7 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 })
 
-favor = []
+// reminder to clean up the variables here
 database.ref().on("child_added", function(snap) {
     if (x != undefined) {
     let ab = snap.val()
