@@ -256,9 +256,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=" : 0";
+        var delim=" , 0";
     }else{
-        var delim=" : "; 
+        var delim=" , "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -266,7 +266,7 @@ $(document).ready(function() {
         var hdelim=" "; 
     }
 
-        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hours '+delim+minutesQ+' Minutes'); }
+        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' hrs '+delim+minutesQ+' mins'); }
         
         if (distanceQ < 0 ) {
             clearInterval(y);
