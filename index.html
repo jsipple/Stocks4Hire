@@ -2,7 +2,7 @@
 
 <html lang="en">
 
-<head>
+    <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,20 +66,46 @@
                     <div class='flex-div'>
                         <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
                         <div>
+
                         <h1>Stocks4Hire</h1>
                         <h2>Saving your money for the fallout</h2>
                         <span id="signUpModal">
-                        <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3" data-toggle="modal" data-target="#signupModal">
-                     Sign Up
-                 </button></span>
-                 <span id="signInModal"><button type="button" id="signinmodal-btn" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
-                     Sign In
-                 </button></span>
-                 <span id="logout"><button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
-                    logout
-                </button></span>
-                 <div id="welcome"></div>
+                            <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3 btncol" data-toggle="modal" data-target="#signupModal">
+                                Sign Up
+                            </button>
+                        </span>
+                        <span id="signInModal">
+                            <button type="button" id="signinmodal-btn" class="btn btn-primary  btncol" data-toggle="modal" data-target="#signinModal">
+                                Sign In
+                            </button>
+                        </span>
+                        <span id="logout">
+                            <button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
+                                logout
+                            </button>
+                        </span>
+                        <div id="welcome"></div>
                     </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-6">
+                        <div class="card card-default"> <!-- id="stocksListed"> -->
+                            <div class="card-header">
+                                Top 5 Stocks
+                                <div id="favorites"></div>
+                            </div>
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Stock Name</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockslisted">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
             <div class="row mb-3">
                 <div class="col-lg-6">
@@ -87,38 +113,12 @@
                         <div class="card-header" id="stock">
                             Top 5 Stocks
                             <div id="favorites"></div>
-                        </div>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Stock Name</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stockslisted">
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
                     <div class="col-lg-6">
-                    <div>
-                            <div class="card-header" id="marketTimer">
-                                    Financial News
-                                </div>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th class='txtcol'>Current News</th>
-                                </tr>
-                            </thead>
-                            <tbody id="newsArticles" >
+                        <div class="card-header" id="marketTimer">
+                            Financial News
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
         
 
@@ -216,6 +216,9 @@
     </div>
     <!--end of footer div-->
      <div class="container"> 
+
+
+        </div>            
 
     </body>
     <script src="app.js"></script>
