@@ -13,10 +13,11 @@ body {
     padding-bottom: 1%;
 
 }
-/* 
-#search-container{
-    margin: 1%;
-} */
+
+ #search-container{
+    padding: 0px;
+    margin: 0px;
+}  
 
 .jumbotron {
     background-color: black;
@@ -56,10 +57,6 @@ h2 {
     border: white solid 1px;
 }
 
-#searches{
-    padding: 10px;
-}
-
 #login-div{
     float: right;
     padding: 0px;
@@ -74,7 +71,18 @@ h2 {
 #signUpModal{
     display: none;
 }
+#signinmodal-btn{
+    float: right;
+    margin-right: 5%;
+}
+#signupmodal-btn{
+    float: right;
 
+}
+
+#favs{
+    margin-top: 3%;
+}
 #footer {
     position: absolute;
     bottom: 0;
