@@ -10,7 +10,6 @@ body {
 
 .jumbotron {
     background-color: black;
-    color: white;
     padding: 10px;
 }
 
@@ -52,10 +51,6 @@ h2 {
 #signUpModal{
     display: none;
 }
-/* .navbar {
-    float: right;
-} */
-
 
 #footer {
     position: absolute;
@@ -63,11 +58,6 @@ h2 {
     line-height: 0.15em;
     opacity: .75;
 }
-
-/* .container {
-    height: 40vh;
-    width: 50vw;
-} */
 
 a { 
     color: rgb(240, 245, 226); 
@@ -81,8 +71,24 @@ a {
 }
 
 .dropdown-toggle {
-    border: 1px red solid
+    border: 1px rgb(208, 255, 0) solid
 }
 .fa {
     color: #CCCC00;
+}
+
+.navbarstyling{
+    background-color: #eace6a;
+    font-weight: bold;
+}
+
+#stockslisted,.colbold{
+    color: black;
+    font-weight: bold;
+}
+
+.btncol{
+    background-color: rgb(34, 66, 25);
+    font-weight: bold;
+    color: white;
 }
