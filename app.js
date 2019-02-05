@@ -63,7 +63,8 @@ $(document).ready(function() {
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
         // also had to take close out of here
-        var close = $("<td>").text("$" + response[input].chart[20]);
+        var close = $("<td>").text("$" + response[input].chart[19].close);
+        console.log(response[input])
         var canvas = $("<canvas>");
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
