@@ -1,12 +1,14 @@
 
 $(document).ready(function() {
-
+    let remove;
     let date = []
     let favoriteId;
     let stockValue = []
-
+    let user;
+    let aoeu;
+    let keys5
     var clicked = true;
-
+    let favArr = []
     // Initialize Firebase
     
 
@@ -39,10 +41,9 @@ $(document).ready(function() {
         console.log(response);
         
         for(var i = 0; i < response[input].chart.length; i++){
-
-            stockValue.push(response[input].chart[i].close);
+// i had to take the close out of here
+            stockValue.push(response[input].chart[i]);
             date.push(response[input].chart[i].date);
-
         }
 
         first = stockValue[0];
@@ -61,7 +62,8 @@ $(document).ready(function() {
         var tbody = $("#stockslisted");
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
-        var close = $("<td>").text("$" + response[input].chart[20].close);
+        // also had to take close out of here
+        var close = $("<td>").text("$" + response[input].chart[20]);
         var canvas = $("<canvas>");
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
@@ -69,17 +71,54 @@ $(document).ready(function() {
             // alternating but toggle class not working because adding if i do opposite just taking out
             favoriteId = $(this).parent(".chart").attr("value")
             if ($(this).hasClass("fa-star")) {
-                console.log("a")
                 // this is keeping the star colored when refreshed seems to always have it stared
                 // below grabs the value of the chart and that would grab the search term
-                console.log($(this).parent(".chart").attr("value"))
                 database.ref('favorites/' + x).push({
                     favorite: $(this).parent(".chart").attr("value")
                    });
             }
+          
+            if ($(this).hasClass("fa-star-o")) {
+                // gets company code
+                // maybe make this do a .once
+                database.ref("favorites/" + x).once("value", function(snap) {
+                    let ack = snap.val()
+                    let key1 = Object.keys(ack)
+                    for (let j = 0; j < key1.length; j++) {
+                        let k1 = key1[j]
+                        let rFav = ack[k1].favorite
+                        if (favoriteId == rFav) {
+                            database.ref("favorites/" + x).child(k1).set({
+                                favorite: null
+                            })
+                        }
+                    }
+                })
+                // .removeValue($(this).parent(".chart").attr("value"))
+            }
+            database.ref("favorites/").on("child_added", function(snap) {
+                // this is doing for all users need to make user specific
+                let favoriteArr = []
+                let ab = snap.val()
+                let keys = Object.keys(ab)
+                console.log(keys);
+                for (let i = 0; i < keys.length; i++) {
+                    let k = keys[i]
+                    let fav = ab[k].favorite
+                    favoriteArr.push(fav) 
+                }
+                favArr = [...favoriteArr]
+                console.log(favArr)
+                favoriteArr = []
+            });
         })
         canvas.attr("id", input).hide();
 // me adding the id here causes the graph not to appear
+// need to change the favArr to be unique to current user
+        console.log(favArr)
+        if (favArr.indexOf(input) != -1) {
+            favoriteIcon.toggleClass("fa-star-o fa-star")
+        }
         var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
         var newRow = $("<tr>").append(canvas);
@@ -290,7 +329,6 @@ var config = {
   firebase.initializeApp(config);
 let database = firebase.database();
 let auth = firebase.auth()
-let user = auth.currentUser
 let username = null
 let x;
 
@@ -303,16 +341,12 @@ $("#signIn").on("click", function(event) {
     signIn.catch(e => console.log(e.message))
 })
 $("#signUp").on("click", function(event) {
-    console.log("test")
     event.preventDefault();
     username = $("#entry-displayname").val().trim()
     const email = $("#entry-email").val().trim()
     const pass = $("#entry-password").val().trim()
-    console.log("entry-email")
-    console.log(username)
     const signUp = auth.createUserWithEmailAndPassword(email,pass)
     signUp.catch(e => console.log(e.message))
-    console.log(auth.currentUser)
 })
 
 
@@ -338,6 +372,8 @@ $("#signUp").on("click", function(event) {
 
 $("#logoutBtn").on("click", function() {
     auth.signOut()
+    $(".chart").empty()
+    favArr = []
 })
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
@@ -362,8 +398,23 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 })
 
-database.ref('favorites/' + x).on("value", function(snap) {
-    console.log(snap.val())
-})
+favor = []
+database.ref().on("child_added", function(snap) {
+    if (x != undefined) {
+    let ab = snap.val()
+    let keys = Object.keys(ab)
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i] == x) {
+            aoeu = ab[keys[i]]
+            keys5= Object.keys(aoeu)
+            for (j = 0; j < keys5.length; j++) {
+            let k = keys5[j]
+            let fav = aoeu[k].favorite
+            favArr.push(fav)
+            }
+        }
+    }
+}
+});
 
 });
