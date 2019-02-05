@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     let remove;
     let date = []
@@ -11,8 +10,9 @@ $(document).ready(function() {
     let favArr = []
     // Initialize Firebase
     
-    function callApi(event, input)
- event.preventDefault();
+
+    $("#add-button").on("click", function(event){
+        event.preventDefault();
 
         var first;
         var last;
@@ -40,9 +40,10 @@ $(document).ready(function() {
         console.log(response);
         
         for(var i = 0; i < response[input].chart.length; i++){
-// i had to take the close out of here
-            stockValue.push(response[input].chart[i]);
-            date.push(response[input].chart[i].date.close);
+
+            stockValue.push(response[input].chart[i].close);
+            date.push(response[input].chart[i].date);
+
         }
 
         first = stockValue[0];
@@ -61,10 +62,10 @@ $(document).ready(function() {
         var tbody = $("#stockslisted");
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
-        // also had to take close out of here
         var close = $("<td>").text("$" + response[input].chart[19].close);
         var canvas = $("<canvas>");
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
+
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
             $(this).toggleClass("fa-star-o fa-star")
             // alternating but toggle class not working because adding if i do opposite just taking out
@@ -112,12 +113,10 @@ $(document).ready(function() {
             });
         })
         canvas.attr("id", input).hide();
-// me adding the id here causes the graph not to appear
-// need to change the favArr to be unique to current user
-        console.log(favArr)
         if (favArr.indexOf(input) != -1) {
             favoriteIcon.toggleClass("fa-star-o fa-star")
         }
+// me adding the id here causes the graph not to appear
         var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
         var newRow = $("<tr>").append(canvas);
@@ -183,8 +182,6 @@ $(document).ready(function() {
                 
             }
         });
-    $("#add-button").on("click", callApi(event, )){
-       
     
     function getNews(item){
     
