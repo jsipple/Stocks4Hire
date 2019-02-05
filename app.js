@@ -11,9 +11,8 @@ $(document).ready(function() {
     let favArr = []
     // Initialize Firebase
     
-
-    $("#add-button").on("click", function(event){
-        event.preventDefault();
+    function callApi(event, input)
+ event.preventDefault();
 
         var first;
         var last;
@@ -184,6 +183,8 @@ $(document).ready(function() {
                 
             }
         });
+    $("#add-button").on("click", callApi(event, )){
+       
     
     function getNews(item){
     
