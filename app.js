@@ -9,19 +9,13 @@ $(document).ready(function() {
     var clicked = true;
     let favArr = []
     // Initialize Firebase
-    
-
-    $("#add-button").on("click", function(event){
-        event.preventDefault();
-
+    function stock(input){
         var first;
         var last;
 
         date = []
 
         stockValue = []
-
-        var input = $("#user-input").val().trim()
 
         console.log(input);
 
@@ -231,9 +225,22 @@ $(document).ready(function() {
 
     });
 
-    });
+    };
 
 
+    $("#add-button").on("click", function(event) {
+        event.preventDefault()
+        stock($("#user-input").val().trim())
+    })
+
+    $("#favs").on("click", function(event) {
+        event.preventDefault()
+        $(".chart").empty()
+        $("#stock").text("Favorites")
+        for (let b = 0; b < favArr.length; b++) {
+            stock(favArr[b])
+        }
+    })
     ////Market close/open TIMER
     var tday =moment('15:30', 'HH:mm');
     var minAway=tday.diff(moment(),"s");
