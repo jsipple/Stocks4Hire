@@ -16,8 +16,8 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
 
-    <title>Document</title>
-
+    <title>S4H</title>
+    <link rel="icon" href="..//project1/images/s4h logo.PNG"/>
  
 </head>
 
@@ -25,21 +25,10 @@
 
 
         <body>
-
-                <!--Navigation bar-->
-                <!-- <div class="nav-bar">
-                        <nav class="navbar navbar-light bg-light">
-                            <a class="navbar-brand">Navbar</a>
-                                <form class="form-inline">
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Find Stocks" aria-label="Search">
-                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
-                                </form>
-                                  </nav>
-                    </div> -->
-
-        <div class="container">
+        
     <!--Navigation bar-->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
+            <a class="navbar-brand" href="#">S4H</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,7 +39,7 @@
                 </li>
                 <li class="nav-item">
                         <div class="btn-group">
-                            <button id="favs">favorites</button>
+                            <button id="favs">Favorites</button>
                                 <div class="dropdown-menu">
                                   <a class="dropdown-item" href="#">Action</a>
                                   <a class="dropdown-item" href="#">Another action</a>
@@ -69,7 +58,9 @@
               </form>
             </div>
           </nav>
-          <div class="container">
+         
+
+<div class="container">
                 <!-- Jumbotron -->
                 <div class="jumbotron">
                     <div class='flex-div'>
@@ -129,16 +120,27 @@
                 </div>
             </div>
             <div class="row">
+        
+
      
-<!-- keep track of last 5 stocks searched-->
-    <div class="container" id="search-container">
-        <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
-    </div>
+
+        <!-- keep track of last 5 stocks searched-->
+        <div class="container" id="search-container">
+            <div class="card card-default">
+                <div class="card-header" id="searches">Recent Searches</div>
+            </div>
+        </div>
+
+        <!-- removed: <i class="fa fa-table" aria-hidden="true"></i> check to make sure this is okay -->
+        <!--end of search div-->
 
         
+
+
         <!-- <div class="container">
             <canvas id="myChart" width="150" height="150" ></canvas>
         </div> -->
+        
         <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
              <div class="modal-content">
@@ -197,20 +199,24 @@
              </div>
          </div>
          </div>
-                    <!--footer-->
+
+   
+    <!--footer-->
 
     <div class="container" id="footer">
-        <div class="card card-default">
-            <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>
-                <h2>Stocks4Hire</h2>
-                <h4>Contact Us</h4>
-                <p>Hilton Garden Inn</p>
-                <p>1500 RDU Center Drive, Cary NC</p>
-                <p>919-867-5309</p>
+            <div class="card card-default">
+                <div class="card-header" id="searches">
+                    <h2>Stocks4Hire</h2>
+                    <h4>Contact Us</h4>
+                    <p>Hilton Garden Inn</p>
+                    <p>1500 RDU Center Drive, Cary NC</p>
+                    <p>919-867-5309</p>
+                </div>
             </div>
-        </div>
-</div>
-<!--end of footer div-->
+    </div>
+    <!--end of footer div-->
+     <div class="container"> 
+
     </body>
     <script src="app.js"></script>
 </html>
