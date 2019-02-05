@@ -16,30 +16,15 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
 
-    <title>Document</title>
-
+    <title>S4H</title>
+    <link rel="icon" href="..//project1/images/s4h logo.PNG"/>
  
 </head>
-
-    
-
-
-        <body>
-
-                <!--Navigation bar-->
-                <!-- <div class="nav-bar">
-                        <nav class="navbar navbar-light bg-light">
-                            <a class="navbar-brand">Navbar</a>
-                                <form class="form-inline">
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Find Stocks" aria-label="Search">
-                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
-                                </form>
-                                  </nav>
-                    </div> -->
-
-        <div class="container">
+<body>  
     <!--Navigation bar-->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
+            <a class="navbar-brand" href="#">S4H</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,7 +35,7 @@
                 </li>
                 <li class="nav-item">
                         <div class="btn-group">
-                            <button id="favs">favorites</button>
+                            <button id="favs" class="btn btn-primary">Favorites</button>
                                 <div class="dropdown-menu">
                                   <a class="dropdown-item" href="#">Action</a>
                                   <a class="dropdown-item" href="#">Another action</a>
@@ -62,34 +47,36 @@
                 </li>
               </ul>
               <button type="button" class="btn btn-default btn-lg" value="hey">
-                  </button>
+                </button>
               <form class="form-inline my-2 my-lg-0">
                 <input id="user-input" class="form-control mr-sm-2" type="search" placeholder="Enter Ticker Symbol" aria-label="Search">
                 <button id="add-button" class="btn btn-outline-success my-2 my-sm-0" type="submit">$$</button>
               </form>
             </div>
-          </nav>
-          <div class="container">
-                <!-- Jumbotron -->
-                <div class="jumbotron">
-                    <div class='flex-div'>
-                        <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
-                        <div>
-                        <h1>Stocks4Hire</h1>
-                        <h2>Saving your money for the fallout</h2>
-                        <span id="signUpModal">
-                        <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3" data-toggle="modal" data-target="#signupModal">
-                     Sign Up
-                 </button></span>
-                 <span id="signInModal"><button type="button" id="signinmodal-btn" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
-                     Sign In
-                 </button></span>
-                 <span id="logout"><button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
-                    logout
-                </button></span>
-                 <div id="welcome"></div>
+    </nav>
+         
+
+<div class="container">
+        <!-- Jumbotron -->
+            <div class="jumbotron">
+                <div class='flex-div'>
+                    <img src="images/s4h logo.PNG" alt="s4h-logo" id="logo">
+                    <div>
+                    <h1>Stocks4Hire</h1>
+                    <h2>Saving your money for the fallout</h2>
+                    <span id="signUpModal">
+                    <button type="button" id="signupmodal-btn" class="btn btn-primary mr-3" data-toggle="modal" data-target="#signupModal">
+                        Sign Up
+                            </button></span>
+                            <span id="signInModal"><button type="button" id="signinmodal-btn" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
+                        Sign In
+                            </button></span>
+                            <span id="logout"><button type="button" class="btn btn-primary mr-3" id="logoutBtn" >
+                        Logout
+                            </button></span>
+                                <div id="Welcome"></div>
                     </div>
-                    </div>
+                </div>
             <div class="row mb-3">
                 <div class="col-lg-6">
                     <div class="card card-default" id="stocksListed">
@@ -115,7 +102,7 @@
                             <div class="card-header" id="marketTimer">
                                     Financial News
                                 </div>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="Current-new-table">
                             <thead>
                                 <tr>
                                     <th class='txtcol'>Current News</th>
@@ -128,17 +115,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-     
-<!-- keep track of last 5 stocks searched-->
-    <div class="container" id="search-container">
-        <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>Recent Searches</div>
-    </div>
+        <!--end of jumbotron div-->
+        </div>
 
-        
+            <!-- <div class="row">
+        </div> -->
         <!-- <div class="container">
             <canvas id="myChart" width="150" height="150" ></canvas>
         </div> -->
+        
         <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
              <div class="modal-content">
@@ -147,7 +132,7 @@
                      <button class="close" data-dismiss="modal" aria-label="Close">&times;</button>
                  </div>
                  <div class="modal-body">
-                     <!-- <form id="form" name="form" action=""> -->
+        <!-- <form id="form" name="form" action=""> -->
                          <div class="form-group">
                              <label for="entry-displayname">Display Name</label>
                              <input type="text" id="entry-displayname" placeHolder="Display Name" class="form-control">
@@ -160,7 +145,8 @@
                              <label for="entry-password">Password</label>
                              <input type="password" id="entry-password" placeHolder="password" class="form-control">
                          </div>
-                     <!-- </form> -->
+                     
+                    <!-- </form> -->
                  </div>
                  <div class="modal-footer">
                      <button type="submit" form="form" id="signUp" class="btn btn-primary" data-dismiss="modal">Sign Up</button>
@@ -168,7 +154,8 @@
                  </div>
              </div>
          </div>
-         </div>
+        </div>
+
          <!-- modal for sign in -->
          <div class="modal" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true">
              <div class="modal-dialog" role="document">
@@ -196,22 +183,38 @@
                  </div>
              </div>
          </div>
-         </div>
-                    <!--footer-->
 
-    <div class="container" id="footer">
-        <div class="card card-default">
-            <div class="card-header" id="searches"><i class="fa fa-table" aria-hidden="true"></i>
-                <h2>Stocks4Hire</h2>
-                <h4>Contact Us</h4>
-                <p>Hilton Garden Inn</p>
-                <p>1500 RDU Center Drive, Cary NC</p>
-                <p>919-867-5309</p>
-            </div>
+    <!-- keep track of last 5 stocks searched-->
+        <div class="container" id="search-container">
+                <div class="card card-default">
+                    <div class="card-header" id="searches">Recent Searches</div>
+                </div>
         </div>
-</div>
-<!--end of footer div-->
-    </body>
-    <script src="app.js"></script>
+        <!-- removed: <i class="fa fa-table" aria-hidden="true"></i> check to make sure this is okay -->
+    <!--end of search div-->
+   
+     <!--end container-->
+    </div>   
+    <!--footer-->
+<footer>
+    <div id="footer">
+            <div class="card card-default">
+                <div class="card-header" id="searches">
+                    <h2>Stocks4Hire</h2>
+                    <h4>Contact Us</h4>
+                    <p>Hilton Garden Inn</p>
+                    <p>1500 RDU Center Drive, Cary NC</p>
+                    <p>919-867-5309</p>
+                </div>
+            </div>
+    </div>
+</footer>
+    <!--end of footer div-->
+
+
+
+</body>
+
+<script src="app.js"></script>
 </html>
 

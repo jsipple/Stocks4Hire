@@ -8,10 +8,21 @@ body {
     height: 100%;
 }
 
+.navbar{
+    width: 100%;
+    padding-bottom: 1%;
+
+}
+
+ #search-container{
+    padding: 0px;
+    margin: 0px;
+}  
+
 .jumbotron {
     background-color: black;
-    color: white;
     padding: 10px;
+    margin-top: 5px;
 }
 
 .card-header {
@@ -36,12 +47,24 @@ h2 {
     font-style: italic;
 }
 
+h4{
+    font-size: 20px;
+}
+
 .flex-div {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+#marketTimer{
+    border: white solid 1px;
+}
+
+#login-div{
+    float: right;
+    padding: 0px;
+}
 
 #logout {
     display:none;
@@ -52,22 +75,27 @@ h2 {
 #signUpModal{
     display: none;
 }
-/* .navbar {
+#signinmodal-btn{
     float: right;
-} */
+    margin-right: 5%;
+}
+#signupmodal-btn{
+    float: right;
 
+}
 
+#favs{
+    margin-top: 3%;
+}
 #footer {
     position: absolute;
     bottom: 0;
     line-height: 0.15em;
     opacity: .75;
+    width: 100%;
+    height: 5px;
+    font-size: 12px;
 }
-
-/* .container {
-    height: 40vh;
-    width: 50vw;
-} */
 
 a { 
     color: rgb(240, 245, 226); 
@@ -81,8 +109,24 @@ a {
 }
 
 .dropdown-toggle {
-    border: 1px red solid
+    border: 1px rgb(208, 255, 0) solid
 }
 .fa {
     color: #CCCC00;
+}
+
+.navbarstyling{
+    background-color: #eace6a;
+    font-weight: bold;
+}
+
+#stockslisted,.colbold{
+    color: black;
+    font-weight: bold;
+}
+
+.btncol{
+    background-color: rgb(34, 66, 25);
+    font-weight: bold;
+    color: white;
 }
