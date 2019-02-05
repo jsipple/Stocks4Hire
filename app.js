@@ -43,7 +43,7 @@ $(document).ready(function() {
         for(var i = 0; i < response[input].chart.length; i++){
 // i had to take the close out of here
             stockValue.push(response[input].chart[i]);
-            date.push(response[input].chart[i].date);
+            date.push(response[input].chart[i].date.close);
         }
 
         first = stockValue[0];
@@ -64,7 +64,6 @@ $(document).ready(function() {
         var name = $("<td>").text(response[input].quote.companyName);
         // also had to take close out of here
         var close = $("<td>").text("$" + response[input].chart[19].close);
-        console.log(response[input])
         var canvas = $("<canvas>");
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
