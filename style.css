@@ -1,3 +1,7 @@
+html {
+    position: relative;
+    min-height: 100%;
+  }
 body {
     background-image:url('images/market.gif');
     background-position: center;
@@ -106,6 +110,7 @@ h4{
     line-height: 0.15em;
     opacity: .75;
     width: 100%;
+    height: 60px;
     font-size: 12px;
 }
 
