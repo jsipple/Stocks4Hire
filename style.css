@@ -91,6 +91,15 @@ h4{
     margin-top: 3%;
 }
 
+#history{
+    margin-top: 3%;
+}
+
+#home-btn{
+    margin-top: 3%;
+    color:#eace6a;
+}
+
 #footer {
     position: absolute;
     bottom: 0;
