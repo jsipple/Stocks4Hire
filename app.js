@@ -23,11 +23,14 @@ $(document).ready(function() {
     let favArr = []
     let sArr = [];
     let searchArr = []
-    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
+
+        date = []
+
+        stockValue = []
 
         console.log(input);
 
@@ -44,9 +47,6 @@ $(document).ready(function() {
         getNews(response[input].quote.companyName);
 
         console.log(response);
-
-        stockValue = [];
-        date = [];
         
         for(var i = 0; i < response[input].chart.length; i++){
 
@@ -55,18 +55,25 @@ $(document).ready(function() {
 
         }
 
-        console.log(stockValue, date);
-
         first = stockValue[0];
-        last = stockValue[19];
+        last = stockValue[20];
         var color;
+
+            if (first > last){
+                color = 'rgba(200, 0, 0, 1)'
+                $("#my-data").css("color", "red");
+            }
+            else if(first < last){
+                color = 'rgba(0, 200, 0, 1)'
+                $("#my-data").css("color", "green");
+            }
 
         var tbody = $("#stockslisted");
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
         var close = $("<td>").text("$" + response[input].chart[19].close);
         var canvas = $("<canvas>");
-        var newTd = $("<td>").attr('colspan', 2).append(canvas);
+
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
 
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
@@ -115,25 +122,15 @@ $(document).ready(function() {
             });
         })
         canvas.attr("id", input).hide();
-
         if (favArr.indexOf(input) != -1) {
             favoriteIcon.toggleClass("fa-star-o fa-star")
         }
 // me adding the id here causes the graph not to appear
-        var table = $("<tr>").append(name, close, favoriteIcon).attr("val", input).addClass("chart").attr('id', input + num)
+        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
-        var newRow = $("<tr>").append(newTd);
+        var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
         tbody.prepend(table, newRow);
-
-        if (first > last){
-            color = 'rgba(200, 0, 0, 1)'
-            $("#" + input + num).css("color", "red");
-        }
-        else if(first < last){
-            color = 'rgba(0, 200, 0, 1)'
-            $("#" + input + num).css("color", "green");
-        }
 
             var ctx = document.getElementById(input).getContext('2d');
             myChart = new Chart(ctx, {
@@ -170,9 +167,6 @@ $(document).ready(function() {
                 }
             }
         });
-
-        num++
-
         $(document).unbind().on("click", ".chart", function(){
             
             var click = $(this).attr("val");
@@ -284,6 +278,8 @@ $(document).ready(function() {
                 }
             }
         }
+        // also need to do the same with news
+        $("#newsArticles").empty()
         $("#stockslisted").empty()
         $("#stock").text("History")
         for (let t = 0; t < 5; t++) {
@@ -297,13 +293,14 @@ $(document).ready(function() {
     $("#favs").on("click", function(event) {
         event.preventDefault()
         $("#stockslisted").empty()
+        $("#newsArticles").empty()
         $("#stock").text("Favorites")
         for (let b = 0; b < favArr.length; b++) {
             stock(favArr[b])
         }
     })
     ////Market close/open TIMER
-    var tday =moment('16:00', 'HH:mm');
+    var tday =moment('15:30', 'HH:mm');
     var minAway=tday.diff(moment(),"s");
     var secAway=minAway*1000;
     var marketStatus="Time Until market closes: ";
@@ -318,7 +315,7 @@ $(document).ready(function() {
     
     if(minAway<0){
         var nextDay=moment().add(1, 'd').format('MM-DD-YYYY');
-        var open=moment(nextDay+'9:00', 'MM-DD-YYYY HH:mm')
+        var open=moment(nextDay+'9:30', 'MM-DD-YYYY HH:mm')
         var minAway=open.diff(moment(),"s");
         var secAway=minAway*1000;
         var marketStatus="Time Until market opens: ";
@@ -348,7 +345,7 @@ $(document).ready(function() {
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
-        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:00 a.m"); 
+        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
     }
     else {//show timer
  
@@ -361,9 +358,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=", 0";
+        var delim=" : 0";
     }else{
-        var delim=", "; 
+        var delim=" : "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -371,7 +368,7 @@ $(document).ready(function() {
         var hdelim=" "; 
     }
 
-        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hrs '+delim+minutesQ+' Mins'); }
+        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hours '+delim+minutesQ+' Minutes'); }
         
         if (distanceQ < 0 ) {
             clearInterval(y);
@@ -426,6 +423,7 @@ $("#signUp").on("click", function(event) {
 
 $("#logoutBtn").on("click", function() {
     auth.signOut()
+    $("#newsArticles").empty()
     $(".chart").empty()
     favArr = []
 })
