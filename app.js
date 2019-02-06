@@ -130,7 +130,7 @@ $(document).ready(function() {
         var newRow = $("<tr>").append(canvas);
 
 
-        tbody.append(table, newRow);
+        tbody.prepend(table, newRow);
 
             var ctx = document.getElementById(input).getContext('2d');
             myChart = new Chart(ctx, {
@@ -252,7 +252,7 @@ $(document).ready(function() {
     })
     $("#history").on("click", function() {
         // below is grabbing favorites not searches
-        database.ref("search/").on("value", function(snap) {
+        database.ref("search/").once("value", function(snap) {
             if (x != undefined) {
             let abc = snap.val()
             // look into what the below does
@@ -278,7 +278,7 @@ $(document).ready(function() {
                 }
             }
         }
-        $("#chart").empty()
+        $("#stockslisted").empty()
         $("#stock").text("History")
         for (let t = 0; t < 5; t++) {
         stock(searchArr[t])
@@ -290,7 +290,7 @@ $(document).ready(function() {
     
     $("#favs").on("click", function(event) {
         event.preventDefault()
-        $(".chart").empty()
+        $("#stockslisted").empty()
         $("#stock").text("Favorites")
         for (let b = 0; b < favArr.length; b++) {
             stock(favArr[b])
@@ -426,6 +426,7 @@ $("#logoutBtn").on("click", function() {
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
         console.log(`user logged in`)
+        $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
         $("#signUpModal").hide()
         $("#signInModal").hide()
         $("#logout").show()
@@ -436,7 +437,6 @@ auth.onAuthStateChanged(firebaseUser => {
     }
     // this isn't working
     x = firebaseUser.displayName
-    $("#welcome").text(`Welcome ${firebaseUser.displayName}`)
     } else {
         console.log(`user logged out`)
         $("#signUpModal").show()
