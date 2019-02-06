@@ -28,10 +28,6 @@ $(document).ready(function() {
         var first;
         var last;
 
-        date = []
-
-        stockValue = []
-
         console.log(input);
 
         input = input.toUpperCase();
@@ -118,7 +114,7 @@ $(document).ready(function() {
             });
         })
         canvas.attr("id", input).hide();
-        
+
         if (favArr.indexOf(input) != -1) {
             favoriteIcon.toggleClass("fa-star-o fa-star")
         }
@@ -285,7 +281,7 @@ $(document).ready(function() {
         }
     })
     ////Market close/open TIMER
-    var tday =moment('15:30', 'HH:mm');
+    var tday =moment('16:00', 'HH:mm');
     var minAway=tday.diff(moment(),"s");
     var secAway=minAway*1000;
     var marketStatus="Time Until market closes: ";
@@ -300,7 +296,7 @@ $(document).ready(function() {
     
     if(minAway<0){
         var nextDay=moment().add(1, 'd').format('MM-DD-YYYY');
-        var open=moment(nextDay+'9:30', 'MM-DD-YYYY HH:mm')
+        var open=moment(nextDay+'9:00', 'MM-DD-YYYY HH:mm')
         var minAway=open.diff(moment(),"s");
         var secAway=minAway*1000;
         var marketStatus="Time Until market opens: ";
@@ -330,7 +326,7 @@ $(document).ready(function() {
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
-        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
+        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:00 a.m"); 
     }
     else {//show timer
  
@@ -343,9 +339,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=" : 0";
+        var delim=", 0";
     }else{
-        var delim=" : "; 
+        var delim=", "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -353,7 +349,7 @@ $(document).ready(function() {
         var hdelim=" "; 
     }
 
-        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hours '+delim+minutesQ+' Minutes'); }
+        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hrs '+delim+minutesQ+' Mins'); }
         
         if (distanceQ < 0 ) {
             clearInterval(y);
