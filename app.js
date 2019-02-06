@@ -22,6 +22,7 @@ $(document).ready(function() {
     var clicked = true;
     let favArr = []
     let sArr = [];
+    let searchArr = []
     // Initialize Firebase
     function stock(input){
         var first;
@@ -249,23 +250,44 @@ $(document).ready(function() {
             searches: $("#user-input").val().trim()
            });
     })
-    database.ref("search/").on("child_added", function(snap) {
-        // this is doing for all users need to make user specific
-        let searchArr = []
-        let obj = snap.val()
-        let keys3 = Object.keys(obj)
-        console.log(keys3)
-        for (let m = 0; m < keys3.length; m++) {
-            let ke = keys3[m]
-            let searched = obj[ke].searches
-            $("#searches").append(stock(searched))
-            searchArr.push(searched)
+    $("#history").on("click", function() {
+        // below is grabbing favorites not searches
+        database.ref("search/").on("value", function(snap) {
+            if (x != undefined) {
+            let abc = snap.val()
+            // look into what the below does
+            // const arrOfUsers = Object.entries(abc); // [key, value]
+            // const match = arrOfUsers.find()
+            let keys3 = Object.keys(abc)
+            for (let o = 0; o < keys3.length; o++) {
+                if (keys3[o] == x) {
+                    aoht = abc[keys3[o]]
+                    keys7 = Object.keys(aoht)
+                    for (let e = 0; e < keys7.length; e++) {
+                    let k2 = keys7[e]
+                    let searchy = aoht[k2].searches
+                    console.log(searchArr.length)
+                    if (searchArr.length > 5) {
+                        console.log("b")
+                            database.ref("search/" + x).child(keys7[5]).set({
+                                searches: null
+                        })
+                    }
+                    searchArr.unshift(searchy)
+                    }
+                }
+            }
         }
-        sArr = [...searchArr]
-        console.log(sArr)
+        $("#chart").empty()
+        $("#stock").text("History")
+        for (let t = 0; t < 5; t++) {
+        stock(searchArr[t])
+        }
         searchArr = []
+})
     })
 
+    
     $("#favs").on("click", function(event) {
         event.preventDefault()
         $(".chart").empty()
