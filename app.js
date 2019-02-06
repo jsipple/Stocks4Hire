@@ -22,6 +22,7 @@ $(document).ready(function() {
     var clicked = true;
     let favArr = []
     let sArr = [];
+    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
@@ -46,6 +47,9 @@ $(document).ready(function() {
         getNews(response[input].quote.companyName);
 
         console.log(response);
+
+        stockValue = [];
+        date = [];
         
         for(var i = 0; i < response[input].chart.length; i++){
 
@@ -54,24 +58,18 @@ $(document).ready(function() {
 
         }
 
-        first = stockValue[0];
-        last = stockValue[20];
-        var color;
+        console.log(stockValue, date);
 
-            if (first > last){
-                color = 'rgba(200, 0, 0, 1)'
-                $("#my-data").css("color", "red");
-            }
-            else if(first < last){
-                color = 'rgba(0, 200, 0, 1)'
-                $("#my-data").css("color", "green");
-            }
+        first = stockValue[0];
+        last = stockValue[19];
+        var color;
 
         var tbody = $("#stockslisted");
         // put this so that it doesn't take up whole line look for other ways around this
         var name = $("<td>").text(response[input].quote.companyName);
         var close = $("<td>").text("$" + response[input].chart[19].close);
         var canvas = $("<canvas>");
+        var newTd = $("<td>").attr('colspan', 2).append(canvas);
         // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
 
         let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
@@ -120,16 +118,25 @@ $(document).ready(function() {
             });
         })
         canvas.attr("id", input).hide();
+        
         if (favArr.indexOf(input) != -1) {
             favoriteIcon.toggleClass("fa-star-o fa-star")
         }
 // me adding the id here causes the graph not to appear
-        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+        var table = $("<tr>").append(name, close, favoriteIcon).attr("val", input).addClass("chart").attr('id', input + num)
 
-        var newRow = $("<tr>").append(canvas);
-
+        var newRow = $("<tr>").append(newTd);
 
         tbody.append(table, newRow);
+
+        if (first > last){
+            color = 'rgba(200, 0, 0, 1)'
+            $("#" + input + num).css("color", "red");
+        }
+        else if(first < last){
+            color = 'rgba(0, 200, 0, 1)'
+            $("#" + input + num).css("color", "green");
+        }
 
             var ctx = document.getElementById(input).getContext('2d');
             myChart = new Chart(ctx, {
@@ -166,6 +173,9 @@ $(document).ready(function() {
                 }
             }
         });
+
+        num++
+
         $(document).unbind().on("click", ".chart", function(){
             
             var click = $(this).attr("val");
