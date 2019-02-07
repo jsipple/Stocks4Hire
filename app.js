@@ -23,14 +23,11 @@ $(document).ready(function() {
     let favArr = []
     let sArr = [];
     let searchArr = []
+    var num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
-
-        date = []
-
-        stockValue = []
 
         console.log(input);
 
@@ -71,6 +68,10 @@ $(document).ready(function() {
                 getNews(response[input].quote.companyName);
 
                 console.log(response);
+
+                date = []
+
+                stockValue = []
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
@@ -79,23 +80,16 @@ $(document).ready(function() {
 
                 }
 
-                first = stockValue[0];
-                last = stockValue[20];
-                var color;
+                console.log(stockValue, date)
 
-                    if (first > last){
-                        color = 'rgba(200, 0, 0, 1)'
-                        $("#my-data").css("color", "red");
-                    }
-                    else if(first < last){
-                        color = 'rgba(0, 200, 0, 1)'
-                        $("#my-data").css("color", "green");
-                    }
+                first = stockValue[0];
+                last = stockValue[25];
+                var color;
 
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-                var close = $("<td>").text("$" + response[input].chart[19].close);
+                var close = $("<td>").text("$" + response[input].chart[25].close);
                 var canvas = $("<canvas>");
 
                 // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
@@ -150,11 +144,20 @@ $(document).ready(function() {
                     favoriteIcon.toggleClass("fa-star-o fa-star")
                 }
         // me adding the id here causes the graph not to appear
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num);
 
                 var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
                 tbody.prepend(table, newRow);
+
+                if (first > last){
+                    color = 'rgba(200, 0, 0, 1)'
+                    $("#" + input + num).css("color", "red");
+                }
+                else if(first < last){
+                    color = 'rgba(0, 200, 0, 1)'
+                    $("#" + input + num).css("color", "green");
+                }
 
                     var ctx = document.getElementById(input).getContext('2d');
                     myChart = new Chart(ctx, {
@@ -191,6 +194,9 @@ $(document).ready(function() {
                         }
                     }
                 });
+
+                num ++ 
+
                 $(document).unbind().on("click", ".chart", function(){
                     
                     var click = $(this).attr("val");
@@ -348,7 +354,7 @@ $(document).ready(function() {
     
     if(minAway<0){
         var nextDay=moment().add(1, 'd').format('MM-DD-YYYY');
-        var open=moment(nextDay+'9:30', 'MM-DD-YYYY HH:mm')
+        var open=moment(nextDay+'9:00', 'MM-DD-YYYY HH:mm')
         var minAway=open.diff(moment(),"s");
         var secAway=minAway*1000;
         var marketStatus="Time Until market opens: ";
@@ -378,7 +384,7 @@ $(document).ready(function() {
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
-        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
+        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:00 a.m"); 
     }
     else {//show timer
  
@@ -391,9 +397,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=" , 0";
+        var delim=", 0";
     }else{
-        var delim=" , "; 
+        var delim=", "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
