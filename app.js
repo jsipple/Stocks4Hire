@@ -38,206 +38,239 @@ $(document).ready(function() {
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
 
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    })
-    .then(function(response){
-
-        getNews(response[input].quote.companyName);
-
-        console.log(response);
-        
-        for(var i = 0; i < response[input].chart.length; i++){
-
-            stockValue.push(response[input].chart[i].close);
-            date.push(response[input].chart[i].date);
-
-        }
-
-        first = stockValue[0];
-        last = stockValue[20];
-        var color;
-
-            if (first > last){
-                color = 'rgba(200, 0, 0, 1)'
-                $("#my-data").css("color", "red");
-            }
-            else if(first < last){
-                color = 'rgba(0, 200, 0, 1)'
-                $("#my-data").css("color", "green");
-            }
-
-        var tbody = $("#stockslisted");
-        // put this so that it doesn't take up whole line look for other ways around this
-        var name = $("<td>").text(response[input].quote.companyName);
-        var close = $("<td>").text("$" + response[input].chart[19].close);
-        var canvas = $("<canvas>");
-
-        // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
-
-        let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
-            $(this).toggleClass("fa-star-o fa-star")
-            // alternating but toggle class not working because adding if i do opposite just taking out
-            favoriteId = $(this).parent(".chart").attr("value")
-            if ($(this).hasClass("fa-star")) {
-                // this is keeping the star colored when refreshed seems to always have it stared
-                // below grabs the value of the chart and that would grab the search term
-                database.ref('favorites/' + x).push({
-                    favorite: $(this).parent(".chart").attr("value")
-                   });
-            }
-          
-            if ($(this).hasClass("fa-star-o")) {
-                // gets company code
-                // maybe make this do a .once
-                database.ref("favorites/" + x).once("value", function(snap) {
-                    let ack = snap.val()
-                    let key1 = Object.keys(ack)
-                    for (let j = 0; j < key1.length; j++) {
-                        let k1 = key1[j]
-                        let rFav = ack[k1].favorite
-                        if (favoriteId == rFav) {
-                            database.ref("favorites/" + x).child(k1).set({
-                                favorite: null
-                            })
-                        }
-                    }
-                })
-            }
-            database.ref("favorites/").on("child_added", function(snap) {
-                // this is doing for all users need to make user specific
-                let favoriteArr = []
-                let ab = snap.val()
-                let keys = Object.keys(ab)
-                console.log(keys);
-                for (let i = 0; i < keys.length; i++) {
-                    let k = keys[i]
-                    let fav = ab[k].favorite
-                    favoriteArr.push(fav) 
-                }
-                favArr = [...favoriteArr]
-                console.log(favArr)
-                favoriteArr = []
-            });
-        })
-        canvas.attr("id", input).hide();
-        if (favArr.indexOf(input) != -1) {
-            favoriteIcon.toggleClass("fa-star-o fa-star")
-        }
-// me adding the id here causes the graph not to appear
-        var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
-
-        var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
-
-        tbody.prepend(table, newRow);
-
-            var ctx = document.getElementById(input).getContext('2d');
-            myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: date,
-
-                datasets: [{
-                    label: input,
-                    data: stockValue,
-                    backgroundColor:[
-                        'rgba(0, 0, 0, 0)'
-                    ],
-                    borderColor: [
-                        color
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                legend: {
-                    labels: {
-                        fontColor: color
-                    }
-                },
-                responsive:true,
-                maintainAspectRatio:true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:false
-                        }
-                    }]
-                }
-            }
-        });
-        $(document).unbind().on("click", ".chart", function(){
-            
-            var click = $(this).attr("val");
-    
-            if(!clicked){
-    
-                $("#" + click).hide();
-    
-                console.log(clicked);
-                clicked = true;
-
-               
-            }
-            else if(clicked){
-     
-                $("#" + click).show();
-
-                console.log(clicked);
-                clicked = false;
-
-                
-            }
-        });
-    
-    function getNews(item){
-    
-        var URL = 'https://newsapi.org/v2/everything?q=' + item + 's&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
-    
         $.ajax({
-            url: URL,
-            method: "GET"
-            })
-            .then(function(response){
-            
-            for(i = 0; i < 5; i++){
-                var newsURL = response.articles[i].url;
-                var title = response.articles[i].title;
-                var dates = response.articles[i].publishedAt.substr(0,10);
-                var author = response.articles[i].author;
-                // what does this do? seems to be looking to replace the first if it starts with a letter with nothing but theres thi g for some reason
-                var itemval=item.replace(/[^a-zA-Z ]/g, "").split(" ").join("");
-                
-                var tbody = $("#newsArticles");
-                var name = $("<td>").text('Click here for latest news for '+item);
-                var newslink = $("<td>").html('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+dates+') '+'Author: '+author+'</a>');
-                var mainrow = $("<tr>").append(name, "<br>").attr("val", itemval).addClass("newslinks");
-                
-                var table = $("<tr class="+itemval+">").append(newslink, "<br>");
-                if(i==0){
-                    tbody.append(mainrow);
-                }
-                tbody.append(table);
-                $('.'+itemval).hide();                    
-                $(".newslinks").unbind().on("click", function(){ 
-                    var click1 = "."+$(this).attr("val");
-                    console.log('click1 '+click1);
-                    
-                    if(!clicked){
-                        $(click1).hide();
-                        clicked = true;
-                    }else if(clicked){
-                        $(click1).show();
-                        clicked = false;
+        url: queryURL,
+        method: "GET",
+        error: function (error) {
+            console.log(error);
+        } 
+        })
+        .catch(function(response) {
+            if (response.status === 400) {
+                $("#compCode").html(input+" Missing Company Code");
+                $("#compNotFound").show();  
+                $(":button").on("click", function(event) {
+                    if ($(this).attr("data-dismiss")=='modal'){
+                        $("#compNotFound").hide();
                     }
-                });            
-            };
+                }); 
+                console.clear();
+                return;
+                
+            }else{
+                return response;
+            }
+        })
+        .then(function(response){
+            if(!response){
+                return;
+            }
             
-        });
-    }
+            if (response[input]!=undefined ){
 
-    });
+                getNews(response[input].quote.companyName);
+
+                console.log(response);
+                
+                for(var i = 0; i < response[input].chart.length; i++){
+
+                    stockValue.push(response[input].chart[i].close);
+                    date.push(response[input].chart[i].date);
+
+                }
+
+                first = stockValue[0];
+                last = stockValue[20];
+                var color;
+
+                    if (first > last){
+                        color = 'rgba(200, 0, 0, 1)'
+                        $("#my-data").css("color", "red");
+                    }
+                    else if(first < last){
+                        color = 'rgba(0, 200, 0, 1)'
+                        $("#my-data").css("color", "green");
+                    }
+
+                var tbody = $("#stockslisted");
+                // put this so that it doesn't take up whole line look for other ways around this
+                var name = $("<td>").text(response[input].quote.companyName);
+                var close = $("<td>").text("$" + response[input].chart[19].close);
+                var canvas = $("<canvas>");
+
+                // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
+
+                let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
+                    $(this).toggleClass("fa-star-o fa-star")
+                    // alternating but toggle class not working because adding if i do opposite just taking out
+                    favoriteId = $(this).parent(".chart").attr("value")
+                    if ($(this).hasClass("fa-star")) {
+                        // this is keeping the star colored when refreshed seems to always have it stared
+                        // below grabs the value of the chart and that would grab the search term
+                        database.ref('favorites/' + x).push({
+                            favorite: $(this).parent(".chart").attr("value")
+                        });
+                    }
+                
+                    if ($(this).hasClass("fa-star-o")) {
+                        // gets company code
+                        // maybe make this do a .once
+                        database.ref("favorites/" + x).once("value", function(snap) {
+                            let ack = snap.val()
+                            let key1 = Object.keys(ack)
+                            for (let j = 0; j < key1.length; j++) {
+                                let k1 = key1[j]
+                                let rFav = ack[k1].favorite
+                                if (favoriteId == rFav) {
+                                    database.ref("favorites/" + x).child(k1).set({
+                                        favorite: null
+                                    })
+                                }
+                            }
+                        })
+                    }
+                    database.ref("favorites/").on("child_added", function(snap) {
+                        // this is doing for all users need to make user specific
+                        let favoriteArr = []
+                        let ab = snap.val()
+                        let keys = Object.keys(ab)
+                        console.log(keys);
+                        for (let i = 0; i < keys.length; i++) {
+                            let k = keys[i]
+                            let fav = ab[k].favorite
+                            favoriteArr.push(fav) 
+                        }
+                        favArr = [...favoriteArr]
+                        console.log(favArr)
+                        favoriteArr = []
+                    });
+                })
+                canvas.attr("id", input).hide();
+                if (favArr.indexOf(input) != -1) {
+                    favoriteIcon.toggleClass("fa-star-o fa-star")
+                }
+        // me adding the id here causes the graph not to appear
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+
+                var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
+
+                tbody.prepend(table, newRow);
+
+                    var ctx = document.getElementById(input).getContext('2d');
+                    myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: date,
+
+                        datasets: [{
+                            label: input,
+                            data: stockValue,
+                            backgroundColor:[
+                                'rgba(0, 0, 0, 0)'
+                            ],
+                            borderColor: [
+                                color
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            labels: {
+                                fontColor: color
+                            }
+                        },
+                        responsive:true,
+                        maintainAspectRatio:true,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:false
+                                }
+                            }]
+                        }
+                    }
+                });
+                $(document).unbind().on("click", ".chart", function(){
+                    
+                    var click = $(this).attr("val");
+            
+                    if(!clicked){
+            
+                        $("#" + click).hide();
+            
+                        console.log(clicked);
+                        clicked = true;
+
+                    
+                    }
+                    else if(clicked){
+            
+                        $("#" + click).show();
+
+                        console.log(clicked);
+                        clicked = false;
+
+                        
+                    }
+                });
+            
+            function getNews(item){
+            
+                var URL = 'https://newsapi.org/v2/everything?q=' + item + 's&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
+            
+                $.ajax({
+                    url: URL,
+                    method: "GET"
+                    })
+                    .then(function(response){
+                    
+                    for(i = 0; i < 5; i++){
+                        var newsURL = response.articles[i].url;
+                        var title = response.articles[i].title;
+                        var dates = response.articles[i].publishedAt.substr(0,10);
+                        var author = response.articles[i].author;
+                        // what does this do? seems to be looking to replace the first if it starts with a letter with nothing but theres thi g for some reason
+                        var itemval=item.replace(/[^a-zA-Z ]/g, "").split(" ").join("");
+                        
+                        var tbody = $("#newsArticles");
+                        var name = $("<td>").text('Click here for latest news for '+item);
+                        var newslink = $("<td>").html('<a href="'+newsURL+'" target="blank">'+title+' (Date: '+dates+') '+'Author: '+author+'</a>');
+                        var mainrow = $("<tr>").append(name, "<br>").attr("val", itemval).addClass("newslinks");
+                        
+                        var table = $("<tr class="+itemval+">").append(newslink, "<br>");
+                        if(i==0){
+                            tbody.append(mainrow);
+                        }
+                        tbody.append(table);
+                        $('.'+itemval).hide();                    
+                        $(".newslinks").unbind().on("click", function(){ 
+                            var click1 = "."+$(this).attr("val");
+                            console.log('click1 '+click1);
+                            
+                            if(!clicked){
+                                $(click1).hide();
+                                clicked = true;
+                            }else if(clicked){
+                                $(click1).show();
+                                clicked = false;
+                            }
+                        });            
+                    };
+                    
+                });
+            }
+
+            }else{
+                $("#compCode").html(input+" Not Found");
+                $("#compNotFound").show();
+                $(":button").on("click", function(event) {
+                    if ($(this).attr("data-dismiss")=='modal'){
+                        $("#compNotFound").hide();
+                    }
+                });
+            }
+        });
 
     };
 
@@ -300,7 +333,7 @@ $(document).ready(function() {
         }
     })
     ////Market close/open TIMER
-    var tday =moment('15:30', 'HH:mm');
+    var tday =moment('16:00', 'HH:mm');
     var minAway=tday.diff(moment(),"s");
     var secAway=minAway*1000;
     var marketStatus="Time Until market closes: ";
@@ -339,8 +372,8 @@ $(document).ready(function() {
  
     var weekday=moment().weekday();
     
-    if( //after 3:30 on friday
-        ((weekday>5) || (weekday==5 && (parseInt(moment().format('HH')==13) && parseInt(moment().format('mm')>30) || parseInt(moment().format('HH')>=14))) || (weekday==0)) 
+    if( //after 4:00 on friday
+        ((weekday>5) || (weekday==5 && (parseInt(moment().format('HH')==16) && parseInt(moment().format('mm')>0) || parseInt(moment().format('HH')>=16))) || (weekday==0)) 
             ||  
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
@@ -358,9 +391,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=" : 0";
+        var delim=" , 0";
     }else{
-        var delim=" : "; 
+        var delim=" , "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -368,7 +401,7 @@ $(document).ready(function() {
         var hdelim=" "; 
     }
 
-        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' Hours '+delim+minutesQ+' Minutes'); }
+        if(secondsQ>=0){$("#marketTimer").html("Financial News: &nbsp &nbsp &nbsp  &nbsp &nbsp"+marketStatus+hdelim+hoursQ+' hrs '+delim+minutesQ+' min'); }
         
         if (distanceQ < 0 ) {
             clearInterval(y);
