@@ -152,11 +152,11 @@ $(document).ready(function() {
 
                 if (first > last){
                     color = 'rgba(200, 0, 0, 1)'
-                    $("#" + input + num).css("color", "red");
+                    $("#" + input + num).css("color", color);
                 }
                 else if(first < last){
                     color = 'rgba(0, 200, 0, 1)'
-                    $("#" + input + num).css("color", "green");
+                    $("#" + input + num).css("color", color);
                 }
 
                     var ctx = document.getElementById(input).getContext('2d');
@@ -354,7 +354,7 @@ $(document).ready(function() {
     
     if(minAway<0){
         var nextDay=moment().add(1, 'd').format('MM-DD-YYYY');
-        var open=moment(nextDay+'9:00', 'MM-DD-YYYY HH:mm')
+        var open=moment(nextDay+'9:30', 'MM-DD-YYYY HH:mm')
         var minAway=open.diff(moment(),"s");
         var secAway=minAway*1000;
         var marketStatus="Time Until market opens: ";
@@ -384,7 +384,7 @@ $(document).ready(function() {
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
-        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:00 a.m"); 
+        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
     }
     else {//show timer
  
