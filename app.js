@@ -383,9 +383,9 @@ $(document).ready(function() {
     var weekday=moment().weekday();
     
     if( //after 4:00 on friday
-        ((weekday>5) || (weekday==5 && (parseInt(moment().format('HH')==16) && parseInt(moment().format('mm')>0) || parseInt(moment().format('HH')>=16))) || (weekday==0)) 
+        ((weekday>5) || (weekday==5 && ((parseInt(moment().format('HH'))==16) && (parseInt(moment().format('mm'))>0) || (parseInt(moment().format('HH'))>=16))) || (weekday==0)) 
             ||  
-        (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
+        (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && (parseInt(moment().format('mm')))<25))
         )
     ){  //check if the current date is less than monday
         $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
