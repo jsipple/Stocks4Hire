@@ -305,18 +305,21 @@ $(document).ready(function() {
             }
         }
         // empties out the stock and news tables and replaces them with last five searched
+        if (!x) {
         $("#newsArticles").empty()
         $("#stockslisted").empty()
         $("#stock").text("History")
         for (let t = 0; t < 5; t++) {
         stock(searchArr[t])
         }
+    }
         searchArr = []
 })
     })
 
     // when clicking favorites button empties out news and stock and shows favorites
     $("#favs").on("click", function(event) {
+        if (!x) {
         event.preventDefault()
         $("#stockslisted").empty()
         $("#newsArticles").empty()
@@ -324,6 +327,7 @@ $(document).ready(function() {
         for (let b = 0; b < favArr.length; b++) {
             stock(favArr[b])
         }
+    }
     })
     ////Market close/open TIMER
     var tday =moment('16:00', 'HH:mm');
