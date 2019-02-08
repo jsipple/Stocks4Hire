@@ -29,6 +29,12 @@ $(document).ready(function() {
         var first;
         var last;
 
+
+        date = []
+
+        stockValue = []
+
+
         input = input.toUpperCase();
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
@@ -66,10 +72,12 @@ $(document).ready(function() {
 
                 getNews(response[input].quote.companyName);
 
+
                 stockValue = []
                 date = []
 
                 var num2 = -1
+
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
@@ -214,7 +222,9 @@ $(document).ready(function() {
                     }
                 });
 
+
                 num++ 
+
    //api calls to get news links for the stock searched         
             function getNews(item){
             
