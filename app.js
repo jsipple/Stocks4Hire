@@ -88,9 +88,7 @@ $(document).ready(function() {
                 first = stockValue[0];
                 last = stockValue[num2];
 
-                console.log(response)
 
-                console.log(stockValue, date, num2)
                 var color;
 
                 var tbody = $("#stockslisted");
@@ -161,9 +159,6 @@ $(document).ready(function() {
 // below is chartJS it creates the graph
 
         // me adding the id here causes the graph not to appear
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num);
-
-                var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
                 tbody.prepend(table, newRow);
 
