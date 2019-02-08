@@ -23,14 +23,11 @@ $(document).ready(function() {
     let favArr = []
     let sArr = [];
     let searchArr = []
+    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
-
-        date = []
-
-        stockValue = []
 
         input = input.toUpperCase();
 
@@ -68,6 +65,9 @@ $(document).ready(function() {
             if (response[input]!=undefined ){
 
                 getNews(response[input].quote.companyName);
+
+                stockValue = []
+                date = []
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
@@ -77,7 +77,7 @@ $(document).ready(function() {
                 }
 
                 first = stockValue[0];
-                last = stockValue[20];
+                last = stockValue[25];
                 var color;
 
                     if (first > last){
@@ -92,7 +92,7 @@ $(document).ready(function() {
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-                var close = $("<td>").text("$" + response[input].chart[19].close);
+                var close = $("<td>").text("$" + response[input].chart[25].close);
                 var canvas = $("<canvas>");
 
                 // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
@@ -145,11 +145,20 @@ $(document).ready(function() {
                     favoriteIcon.toggleClass("fa-star-o fa-star")
                 }
         // me adding the id here causes the graph not to appear
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num);
 
                 var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
                 tbody.prepend(table, newRow);
+
+                if (first > last){
+                    color = 'rgba(200, 0, 0, 1)'
+                    $("#" + input + num).css("color", "red");
+                }
+                else if(first < last){
+                    color = 'rgba(0, 200, 0, 1)'
+                    $("#" + input + num).css("color", "green");
+                }
 
                     var ctx = document.getElementById(input).getContext('2d');
                     myChart = new Chart(ctx, {
@@ -205,6 +214,8 @@ $(document).ready(function() {
                         
                     }
                 });
+
+                num++ 
    //api calls to get news links for the stock searched         
             function getNews(item){
             
