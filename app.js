@@ -30,7 +30,7 @@ $(document).ready(function() {
         var last;
 
         console.log(input);
-
+     
         input = input.toUpperCase();
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
@@ -41,7 +41,7 @@ $(document).ready(function() {
         error: function (error) {
             console.log(error);
         } 
-        })
+        })//catch the error for when the company name is empty
         .catch(function(response) {
             if (response.status === 400) {
                 $("#compCode").html(input+" Missing Company Code");
@@ -51,6 +51,7 @@ $(document).ready(function() {
                         $("#compNotFound").hide();
                     }
                 }); 
+                //clear console only when error 400 is found 
                 console.clear();
                 return;
                 
@@ -128,14 +129,12 @@ $(document).ready(function() {
                         let favoriteArr = []
                         let ab = snap.val()
                         let keys = Object.keys(ab)
-                        console.log(keys);
                         for (let i = 0; i < keys.length; i++) {
                             let k = keys[i]
                             let fav = ab[k].favorite
                             favoriteArr.push(fav) 
                         }
                         favArr = [...favoriteArr]
-                        console.log(favArr)
                         favoriteArr = []
                     });
                 })
@@ -205,22 +204,18 @@ $(document).ready(function() {
             
                         $("#" + click).hide();
             
-                        console.log(clicked);
                         clicked = true;
-
-                    
                     }
                     else if(clicked){
             
                         $("#" + click).show();
 
-                        console.log(clicked);
                         clicked = false;
 
                         
                     }
                 });
-            
+   //api calls to get news links for the stock searched         
             function getNews(item){
             
                 var URL = 'https://newsapi.org/v2/everything?q=' + item + 's&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
@@ -236,7 +231,7 @@ $(document).ready(function() {
                         var title = response.articles[i].title;
                         var dates = response.articles[i].publishedAt.substr(0,10);
                         var author = response.articles[i].author;
-                        // what does this do? seems to be looking to replace the first if it starts with a letter with nothing but theres thi g for some reason
+                        // replaces the special characters in the string company name so it can be used for class names
                         var itemval=item.replace(/[^a-zA-Z ]/g, "").split(" ").join("");
                         
                         var tbody = $("#newsArticles");
@@ -252,8 +247,7 @@ $(document).ready(function() {
                         $('.'+itemval).hide();                    
                         $(".newslinks").unbind().on("click", function(){ 
                             var click1 = "."+$(this).attr("val");
-                            console.log('click1 '+click1);
-                            
+                           
                             if(!clicked){
                                 $(click1).hide();
                                 clicked = true;
@@ -305,9 +299,9 @@ $(document).ready(function() {
                     for (let e = 0; e < keys7.length; e++) {
                     let k2 = keys7[e]
                     let searchy = aoht[k2].searches
-                    console.log(searchArr.length)
+                    
                     if (searchArr.length > 5) {
-                        console.log("b")
+                        
                             database.ref("search/" + x).child(keys7[5]).set({
                                 searches: null
                         })
@@ -354,7 +348,7 @@ $(document).ready(function() {
     
     if(minAway<0){
         var nextDay=moment().add(1, 'd').format('MM-DD-YYYY');
-        var open=moment(nextDay+'9:00', 'MM-DD-YYYY HH:mm')
+        var open=moment(nextDay+'9:30', 'MM-DD-YYYY HH:mm')
         var minAway=open.diff(moment(),"s");
         var secAway=minAway*1000;
         var marketStatus="Time Until market opens: ";
@@ -384,7 +378,7 @@ $(document).ready(function() {
         (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
-        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:00 a.m"); 
+        $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
     }
     else {//show timer
  
@@ -417,11 +411,7 @@ $(document).ready(function() {
 }
     //END OF TIMER
 
-
-
 // Initialize Firebase
-
-
 
 $("#signIn").on("click", function(event) {
     event.preventDefault()
@@ -440,26 +430,6 @@ $("#signUp").on("click", function(event) {
 })
 
 
-
-//   if (user != null) {
-//     user.providerData.forEach(function (profile) {
-//       console.log("Sign-in provider: " + profile.providerId);
-//       console.log("  Provider-specific UID: " + profile.uid);
-//       console.log("  Name: " + profile.displayName);
-//       console.log("  Email: " + profile.email);
-//       console.log("  Photo URL: " + profile.photoURL);
-//     });
-//   }
-
-//   user.updateProfile({
-//     displayName: "Jane Q. User",
-//     photoURL: "https://example.com/jane-q-user/profile.jpg"
-//   }).then(function() {
-//     // Update successful.
-//   }).catch(function(error) {
-//     // An error happened.
-//   });
-
 $("#logoutBtn").on("click", function() {
     auth.signOut()
     $("#newsArticles").empty()
@@ -468,7 +438,7 @@ $("#logoutBtn").on("click", function() {
 })
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
-        console.log(`user logged in`)
+        
         $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
         $("#signUpModal").hide()
         $("#signInModal").hide()
@@ -481,7 +451,6 @@ auth.onAuthStateChanged(firebaseUser => {
     // this isn't working
     x = firebaseUser.displayName
     } else {
-        console.log(`user logged out`)
         $("#signUpModal").show()
         $("#signInModal").show()
         $("#logout").hide()
