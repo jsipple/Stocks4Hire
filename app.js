@@ -23,13 +23,11 @@ $(document).ready(function() {
     let favArr = []
     let sArr = [];
     let searchArr = []
-    var num = 0;
+    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
-
-        console.log(input);
 
         input = input.toUpperCase();
 
@@ -41,7 +39,7 @@ $(document).ready(function() {
         error: function (error) {
             console.log(error);
         } 
-        })
+        })//catch the error for when the company name is empty
         .catch(function(response) {
             if (response.status === 400) {
                 $("#compCode").html(input+" Missing Company Code");
@@ -51,6 +49,7 @@ $(document).ready(function() {
                         $("#compNotFound").hide();
                     }
                 }); 
+                //clear console only when error 400 is found 
                 console.clear();
                 return;
                 
@@ -67,29 +66,32 @@ $(document).ready(function() {
 
                 getNews(response[input].quote.companyName);
 
-                console.log(response);
-
+                stockValue = []
                 date = []
 
-                stockValue = []
+                var num2 = -1
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
                     stockValue.push(response[input].chart[i].close);
                     date.push(response[input].chart[i].date);
 
+                    num2++
+
                 }
 
-                console.log(stockValue, date)
-
                 first = stockValue[0];
-                last = stockValue[25];
+                last = stockValue[num2];
+
+                console.log(response)
+
+                console.log(stockValue, date, num2)
                 var color;
 
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-                var close = $("<td>").text("$" + response[input].chart[25].close);
+                var close = $("<td>").text("$" + stockValue[num2]);
                 var canvas = $("<canvas>");
 
                 // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
@@ -128,14 +130,12 @@ $(document).ready(function() {
                         let favoriteArr = []
                         let ab = snap.val()
                         let keys = Object.keys(ab)
-                        console.log(keys);
                         for (let i = 0; i < keys.length; i++) {
                             let k = keys[i]
                             let fav = ab[k].favorite
                             favoriteArr.push(fav) 
                         }
                         favArr = [...favoriteArr]
-                        console.log(favArr)
                         favoriteArr = []
                     });
                 })
@@ -152,11 +152,11 @@ $(document).ready(function() {
 
                 if (first > last){
                     color = 'rgba(200, 0, 0, 1)'
-                    $("#" + input + num).css("color", color);
+                    $("#" + input + num).css("color", "red");
                 }
                 else if(first < last){
                     color = 'rgba(0, 200, 0, 1)'
-                    $("#" + input + num).css("color", color);
+                    $("#" + input + num).css("color", "green");
                 }
 
                     var ctx = document.getElementById(input).getContext('2d');
@@ -194,9 +194,6 @@ $(document).ready(function() {
                         }
                     }
                 });
-
-                num ++ 
-
                 $(document).unbind().on("click", ".chart", function(){
                     
                     var click = $(this).attr("val");
@@ -205,22 +202,20 @@ $(document).ready(function() {
             
                         $("#" + click).hide();
             
-                        console.log(clicked);
                         clicked = true;
-
-                    
                     }
                     else if(clicked){
             
                         $("#" + click).show();
 
-                        console.log(clicked);
                         clicked = false;
 
                         
                     }
                 });
-            
+
+                num++ 
+   //api calls to get news links for the stock searched         
             function getNews(item){
             
                 var URL = 'https://newsapi.org/v2/everything?q=' + item + 's&apiKey=d53b18e6f2bb4408bb4b79dd3dfb406b'
@@ -236,7 +231,7 @@ $(document).ready(function() {
                         var title = response.articles[i].title;
                         var dates = response.articles[i].publishedAt.substr(0,10);
                         var author = response.articles[i].author;
-                        // what does this do? seems to be looking to replace the first if it starts with a letter with nothing but theres thi g for some reason
+                        // replaces the special characters in the string company name so it can be used for class names
                         var itemval=item.replace(/[^a-zA-Z ]/g, "").split(" ").join("");
                         
                         var tbody = $("#newsArticles");
@@ -252,8 +247,7 @@ $(document).ready(function() {
                         $('.'+itemval).hide();                    
                         $(".newslinks").unbind().on("click", function(){ 
                             var click1 = "."+$(this).attr("val");
-                            console.log('click1 '+click1);
-                            
+                           
                             if(!clicked){
                                 $(click1).hide();
                                 clicked = true;
@@ -305,9 +299,9 @@ $(document).ready(function() {
                     for (let e = 0; e < keys7.length; e++) {
                     let k2 = keys7[e]
                     let searchy = aoht[k2].searches
-                    console.log(searchArr.length)
+                    
                     if (searchArr.length > 5) {
-                        console.log("b")
+                        
                             database.ref("search/" + x).child(keys7[5]).set({
                                 searches: null
                         })
@@ -397,9 +391,9 @@ $(document).ready(function() {
     var minutesQ = Math.floor((distanceQ % (1000 * 60 * 60)) / (1000 * 60));
     var secondsQ = Math.floor((distanceQ % (1000 * 60)) / 1000);
     if (minutesQ<9){
-        var delim=", 0";
+        var delim=" , 0";
     }else{
-        var delim=", "; 
+        var delim=" , "; 
     }
     if (hoursQ<9){
         var hdelim=" 0";
@@ -417,11 +411,7 @@ $(document).ready(function() {
 }
     //END OF TIMER
 
-
-
 // Initialize Firebase
-
-
 
 $("#signIn").on("click", function(event) {
     event.preventDefault()
@@ -440,26 +430,6 @@ $("#signUp").on("click", function(event) {
 })
 
 
-
-//   if (user != null) {
-//     user.providerData.forEach(function (profile) {
-//       console.log("Sign-in provider: " + profile.providerId);
-//       console.log("  Provider-specific UID: " + profile.uid);
-//       console.log("  Name: " + profile.displayName);
-//       console.log("  Email: " + profile.email);
-//       console.log("  Photo URL: " + profile.photoURL);
-//     });
-//   }
-
-//   user.updateProfile({
-//     displayName: "Jane Q. User",
-//     photoURL: "https://example.com/jane-q-user/profile.jpg"
-//   }).then(function() {
-//     // Update successful.
-//   }).catch(function(error) {
-//     // An error happened.
-//   });
-
 $("#logoutBtn").on("click", function() {
     auth.signOut()
     $("#newsArticles").empty()
@@ -468,7 +438,8 @@ $("#logoutBtn").on("click", function() {
 })
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
-        console.log(`user logged in`)
+        $("#signIn").attr("data-dismiss", "modal")
+        $("#signUp").attr("data-dismiss", "modal")
         $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
         $("#signUpModal").hide()
         $("#signInModal").hide()
@@ -481,11 +452,10 @@ auth.onAuthStateChanged(firebaseUser => {
     // this isn't working
     x = firebaseUser.displayName
     } else {
-        console.log(`user logged out`)
         $("#signUpModal").show()
         $("#signInModal").show()
         $("#logout").hide()
-        $("#welcome").empty()
+        $("#Welcome").empty()
     }
 })
 
