@@ -20,14 +20,17 @@ $(document).ready(function() {
     var clicked = true;
     let favArr = []
     let searchArr = []
+    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
 
+
         date = []
 
         stockValue = []
+
 
         input = input.toUpperCase();
 
@@ -65,31 +68,35 @@ $(document).ready(function() {
             if (response[input]!=undefined ){
 
                 getNews(response[input].quote.companyName);
+
+
+                stockValue = []
+                date = []
+
+                var num2 = -1
+
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
                     stockValue.push(response[input].chart[i].close);
                     date.push(response[input].chart[i].date);
 
+                    num2++
+
                 }
 
                 first = stockValue[0];
-                last = stockValue[20];
-                var color;
+                last = stockValue[num2];
 
-                    if (first > last){
-                        color = 'rgba(200, 0, 0, 1)'
-                        $("#my-data").css("color", "red");
-                    }
-                    else if(first < last){
-                        color = 'rgba(0, 200, 0, 1)'
-                        $("#my-data").css("color", "green");
-                    }
+                console.log(response)
+
+                console.log(stockValue, date, num2)
+                var color;
 
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-                var close = $("<td>").text("$" + response[input].chart[19].close);
+                var close = $("<td>").text("$" + stockValue[num2]);
                 var canvas = $("<canvas>");
 
 // adds the start icon on the stocks and allows you to click it changing what icon is shown and whether it is pushed to your favorites
@@ -144,6 +151,7 @@ $(document).ready(function() {
                 if (favArr.indexOf(input) != -1) {
                     favoriteIcon.toggleClass("fa-star-o fa-star")
                 }
+
         // appends stock data to the table
                 var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 // creates the graph and puts below stocks
@@ -151,6 +159,24 @@ $(document).ready(function() {
 
                 tbody.prepend(table, newRow);
 // below is chartJS it creates the graph
+
+        // me adding the id here causes the graph not to appear
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num);
+
+                var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
+
+                tbody.prepend(table, newRow);
+
+                if (first > last){
+                    color = 'rgba(200, 0, 0, 1)'
+                    $("#" + input + num).css("color", "red");
+                }
+                else if(first < last){
+                    color = 'rgba(0, 200, 0, 1)'
+                    $("#" + input + num).css("color", "green");
+                }
+
+
                     var ctx = document.getElementById(input).getContext('2d');
                     myChart = new Chart(ctx, {
                     type: 'line',
@@ -205,6 +231,10 @@ $(document).ready(function() {
                         
                     }
                 });
+
+
+                num++ 
+
    //api calls to get news links for the stock searched         
             function getNews(item){
             
