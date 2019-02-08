@@ -428,7 +428,8 @@ $("#logoutBtn").on("click", function() {
 })
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
-        
+        $("#signIn").attr("data-dismiss", "modal")
+        $("#signUp").attr("data-dismiss", "modal")
         $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
         $("#signUpModal").hide()
         $("#signInModal").hide()
@@ -444,7 +445,7 @@ auth.onAuthStateChanged(firebaseUser => {
         $("#signUpModal").show()
         $("#signInModal").show()
         $("#logout").hide()
-        $("#welcome").empty()
+        $("#Welcome").empty()
     }
 })
 
