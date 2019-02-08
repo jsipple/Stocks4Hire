@@ -80,7 +80,6 @@ $(document).ready(function() {
                     favorite: $(this).parent(".chart").attr("value")
                    });
             }
-          
             if ($(this).hasClass("fa-star-o")) {
                 // gets company code
                 // maybe make this do a .once
@@ -392,7 +391,10 @@ $("#signIn").on("click", function(event) {
     const email = $("#email").val().trim()
     const pass = $("#password").val().trim()
     const signIn = auth.signInWithEmailAndPassword(email,pass)
-    signIn.catch(e => console.log(e.message))
+    signIn.catch(function (e) {
+     console.log(e.message)
+    })
+
 })
 $("#signUp").on("click", function(event) {
     event.preventDefault();
@@ -432,6 +434,9 @@ $("#logoutBtn").on("click", function() {
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
         console.log(`user logged in`)
+        console.log(firebaseUser)
+        $("#signIn").attr("data-dismiss", "modal")
+        $("#signUp").attr("data-dismiss", "modal")
         $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
         $("#signUpModal").hide()
         $("#signInModal").hide()
@@ -448,7 +453,7 @@ auth.onAuthStateChanged(firebaseUser => {
         $("#signUpModal").show()
         $("#signInModal").show()
         $("#logout").hide()
-        $("#welcome").empty()
+        $("#Welcome").empty()
     }
 })
 
