@@ -26,15 +26,6 @@ $(document).ready(function() {
         var first;
         var last;
 
-<<<<<<< HEAD
-=======
-
-        date = []
-
-        stockValue = []
-
-
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
         input = input.toUpperCase();
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
@@ -72,17 +63,12 @@ $(document).ready(function() {
 
                 getNews(response[input].quote.companyName);
 
-<<<<<<< HEAD
-                stockValue = []
-                date = []
-=======
 
                 stockValue = []
                 date = []
 
                 var num2 = -1
 
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
@@ -94,12 +80,7 @@ $(document).ready(function() {
                 }
 
                 first = stockValue[0];
-<<<<<<< HEAD
-                last = stockValue[25];
-                var color;
-=======
                 last = stockValue[num2];
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
 
 
                 var color;
@@ -107,11 +88,7 @@ $(document).ready(function() {
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-<<<<<<< HEAD
-                var close = $("<td>").text("$" + response[input].chart[25].close);
-=======
                 var close = $("<td>").text("$" + stockValue[num2]);
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
                 var canvas = $("<canvas>");
 
 // adds the start icon on the stocks and allows you to click it changing what icon is shown and whether it is pushed to your favorites
@@ -166,14 +143,9 @@ $(document).ready(function() {
                 if (favArr.indexOf(input) != -1) {
                     favoriteIcon.toggleClass("fa-star-o fa-star")
                 }
-<<<<<<< HEAD
-        // me adding the id here causes the graph not to appear
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num);
-=======
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
 
         // appends stock data to the table
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num)
 // creates the graph and puts below stocks
                 var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
@@ -193,15 +165,6 @@ $(document).ready(function() {
                     $("#" + input + num).css("color", "green");
                 }
 
-
-                if (first > last){
-                    color = 'rgba(200, 0, 0, 1)'
-                    $("#" + input + num).css("color", "red");
-                }
-                else if(first < last){
-                    color = 'rgba(0, 200, 0, 1)'
-                    $("#" + input + num).css("color", "green");
-                }
 
                     var ctx = document.getElementById(input).getContext('2d');
                     myChart = new Chart(ctx, {
@@ -258,13 +221,9 @@ $(document).ready(function() {
                     }
                 });
 
-<<<<<<< HEAD
-                num++ 
-=======
 
                 num++ 
 
->>>>>>> f238554062b2b8f9be14d7c5eba2348773316862
    //api calls to get news links for the stock searched         
             function getNews(item){
             
