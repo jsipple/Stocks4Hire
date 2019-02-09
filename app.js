@@ -26,12 +26,6 @@ $(document).ready(function() {
         var first;
         var last;
 
-
-        date = []
-
-        stockValue = []
-
-
         input = input.toUpperCase();
 
         var queryURL = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + input + "&types=quote,chart&range=1m&last=5";
@@ -151,7 +145,7 @@ $(document).ready(function() {
                 }
 
         // appends stock data to the table
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num)
 // creates the graph and puts below stocks
                 var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
