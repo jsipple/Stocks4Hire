@@ -12,19 +12,25 @@ $(document).ready(function() {
     let auth = firebase.auth()
     let username = null
     let x;
+    let remove;
     let date = []
     let favoriteId;
     let stockValue = []
+    let user;
     let aoeu;
     let keys5
     var clicked = true;
     let favArr = []
+    let sArr = [];
     let searchArr = []
-    let num = 0;
     // Initialize Firebase
     function stock(input){
         var first;
         var last;
+
+        date = []
+
+        stockValue = []
 
         input = input.toUpperCase();
 
@@ -62,59 +68,56 @@ $(document).ready(function() {
             if (response[input]!=undefined ){
 
                 getNews(response[input].quote.companyName);
-
-
-                stockValue = []
-                date = []
-
-                var num2 = -1
-
                 
                 for(var i = 0; i < response[input].chart.length; i++){
 
                     stockValue.push(response[input].chart[i].close);
                     date.push(response[input].chart[i].date);
 
-                    num2++
-
                 }
 
                 first = stockValue[0];
-                last = stockValue[num2];
-
-
+                last = stockValue[20];
                 var color;
+
+                    if (first > last){
+                        color = 'rgba(200, 0, 0, 1)'
+                        $("#my-data").css("color", "red");
+                    }
+                    else if(first < last){
+                        color = 'rgba(0, 200, 0, 1)'
+                        $("#my-data").css("color", "green");
+                    }
 
                 var tbody = $("#stockslisted");
                 // put this so that it doesn't take up whole line look for other ways around this
                 var name = $("<td>").text(response[input].quote.companyName);
-                var close = $("<td>").text("$" + stockValue[num2]);
+                var close = $("<td>").text("$" + response[input].chart[19].close);
                 var canvas = $("<canvas>");
 
-// adds the start icon on the stocks and allows you to click it changing what icon is shown and whether it is pushed to your favorites
+                // might change the click event to be on the td because when on tr can't click the favorite icon also need to grab the tr val when clicked
+
                 let favoriteIcon = $("<i>").addClass("fa fa-star-o").on("click", function() {
                     $(this).toggleClass("fa-star-o fa-star")
-                    // grabs the ticker code of the stock that it is attached to
+                    // alternating but toggle class not working because adding if i do opposite just taking out
                     favoriteId = $(this).parent(".chart").attr("value")
                     if ($(this).hasClass("fa-star")) {
                         // this is keeping the star colored when refreshed seems to always have it stared
-                        // pushes to firebase
+                        // below grabs the value of the chart and that would grab the search term
                         database.ref('favorites/' + x).push({
                             favorite: $(this).parent(".chart").attr("value")
                         });
                     }
-                // takes it out of favorites if changed to the empty star
+                
                     if ($(this).hasClass("fa-star-o")) {
-                        // goes to favorites and current user
+                        // gets company code
+                        // maybe make this do a .once
                         database.ref("favorites/" + x).once("value", function(snap) {
                             let ack = snap.val()
-                            // makes an array of the keys that are in firebase
                             let key1 = Object.keys(ack)
                             for (let j = 0; j < key1.length; j++) {
                                 let k1 = key1[j]
-                                // gives all of the favorites for that user one at a time
                                 let rFav = ack[k1].favorite
-                                // takes the favorite out
                                 if (favoriteId == rFav) {
                                     database.ref("favorites/" + x).child(k1).set({
                                         favorite: null
@@ -124,7 +127,7 @@ $(document).ready(function() {
                         })
                     }
                     database.ref("favorites/").on("child_added", function(snap) {
-                        // when favorite added adds it to an array so that you can call it later
+                        // this is doing for all users need to make user specific
                         let favoriteArr = []
                         let ab = snap.val()
                         let keys = Object.keys(ab)
@@ -133,38 +136,20 @@ $(document).ready(function() {
                             let fav = ab[k].favorite
                             favoriteArr.push(fav) 
                         }
-                        // this is the array that is called and then resets favoriteArr so no duplicates happen
                         favArr = [...favoriteArr]
                         favoriteArr = []
                     });
                 })
                 canvas.attr("id", input).hide();
-                // checks whether favorite has already been favorited
                 if (favArr.indexOf(input) != -1) {
                     favoriteIcon.toggleClass("fa-star-o fa-star")
                 }
+        // me adding the id here causes the graph not to appear
+                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input)
 
-        // appends stock data to the table
-                var table = $("<tr>").append(name, close, favoriteIcon, "<br>").attr("val", input).addClass("chart").attr("value", input).attr('id', input + num)
-// creates the graph and puts below stocks
                 var newRow = $("<tr>").append($("<td>").attr("colspan", 2).append(canvas)) 
 
                 tbody.prepend(table, newRow);
-// below is chartJS it creates the graph
-
-        // me adding the id here causes the graph not to appear
-
-                tbody.prepend(table, newRow);
-
-                if (first > last){
-                    color = 'rgba(200, 0, 0, 1)'
-                    $("#" + input + num).css("color", "red");
-                }
-                else if(first < last){
-                    color = 'rgba(0, 200, 0, 1)'
-                    $("#" + input + num).css("color", "green");
-                }
-
 
                     var ctx = document.getElementById(input).getContext('2d');
                     myChart = new Chart(ctx, {
@@ -220,10 +205,6 @@ $(document).ready(function() {
                         
                     }
                 });
-
-
-                num++ 
-
    //api calls to get news links for the stock searched         
             function getNews(item){
             
@@ -283,62 +264,56 @@ $(document).ready(function() {
 
     };
 
-// when clicking the add-button adds the stock to the stock div
+
     $("#add-button").on("click", function(event) {
         event.preventDefault()
         stock($("#user-input").val().trim())
-        // stores this as recent searches in firebase
+        // need to add storing for the users recent searches then can make a similar click or just append below
         database.ref('search/' + x).push({
             searches: $("#user-input").val().trim()
            });
     })
-    // when clicking history button shows the last 5 searches
     $("#history").on("click", function() {
+        // below is grabbing favorites not searches
         database.ref("search/").once("value", function(snap) {
             if (x != undefined) {
             let abc = snap.val()
-            // below grabs the users
+            // look into what the below does
+            // const arrOfUsers = Object.entries(abc); // [key, value]
+            // const match = arrOfUsers.find()
             let keys3 = Object.keys(abc)
             for (let o = 0; o < keys3.length; o++) {
-                // matches the user to the correct property
                 if (keys3[o] == x) {
                     aoht = abc[keys3[o]]
-                    // grabs the keys firebase created and makes an array
                     keys7 = Object.keys(aoht)
                     for (let e = 0; e < keys7.length; e++) {
-                        // grabs each individual key
                     let k2 = keys7[e]
-                    // grabs each individual search
                     let searchy = aoht[k2].searches
-                    // if there are more than 5 searches in firebase deletes oldest ones
+                    
                     if (searchArr.length > 5) {
                         
                             database.ref("search/" + x).child(keys7[5]).set({
                                 searches: null
                         })
                     }
-                    // put them to search array from front to back so that keys7[5] works if do keys7[0] deletes all history
                     searchArr.unshift(searchy)
                     }
                 }
             }
         }
-        // empties out the stock and news tables and replaces them with last five searched
-        if (!x) {
+        // also need to do the same with news
         $("#newsArticles").empty()
         $("#stockslisted").empty()
         $("#stock").text("History")
         for (let t = 0; t < 5; t++) {
         stock(searchArr[t])
         }
-    }
         searchArr = []
 })
     })
 
-    // when clicking favorites button empties out news and stock and shows favorites
+    
     $("#favs").on("click", function(event) {
-        if (!x) {
         event.preventDefault()
         $("#stockslisted").empty()
         $("#newsArticles").empty()
@@ -346,7 +321,6 @@ $(document).ready(function() {
         for (let b = 0; b < favArr.length; b++) {
             stock(favArr[b])
         }
-    }
     })
     ////Market close/open TIMER
     var tday =moment('16:00', 'HH:mm');
@@ -389,9 +363,9 @@ $(document).ready(function() {
     var weekday=moment().weekday();
     
     if( //after 4:00 on friday
-        ((weekday>5) || (weekday==5 && ((parseInt(moment().format('HH'))==16) && (parseInt(moment().format('mm'))>0) || (parseInt(moment().format('HH'))>=16))) || (weekday==0)) 
+        ((weekday>5) || (weekday==5 && (parseInt(moment().format('HH')==16) && parseInt(moment().format('mm')>0) || parseInt(moment().format('HH')>=16))) || (weekday==0)) 
             ||  
-        (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && (parseInt(moment().format('mm')))<25))
+        (   (weekday==1) && ((parseInt(moment().format('HH'))<9) || (parseInt(moment().format('HH'))==9 && parseInt(moment().format('mm'))<25))
         )
     ){  //check if the current date is less than monday
         $("#marketTimer").html("Market is closed on weekend Reopens on "+monday.format('MM/DD/YYYY')+" @ 9:30 a.m"); 
@@ -429,10 +403,8 @@ $(document).ready(function() {
 
 // Initialize Firebase
 
-
 $("#signIn").on("click", function(event) {
     event.preventDefault()
-    // grabs email and password and compares to the users on firebase
     const email = $("#email").val().trim()
     const pass = $("#password").val().trim()
     const signIn = auth.signInWithEmailAndPassword(email,pass)
@@ -443,23 +415,19 @@ $("#signUp").on("click", function(event) {
     username = $("#entry-displayname").val().trim()
     const email = $("#entry-email").val().trim()
     const pass = $("#entry-password").val().trim()
-    // creates a user and stores their information in firebase to be called later
-    // also signs the user in
     const signUp = auth.createUserWithEmailAndPassword(email,pass)
     signUp.catch(e => console.log(e.message))
 })
 
-// signs the user out and empties the stock and news sections
+
 $("#logoutBtn").on("click", function() {
     auth.signOut()
     $("#newsArticles").empty()
     $(".chart").empty()
     favArr = []
 })
-// checks whether the user is logged in
 auth.onAuthStateChanged(firebaseUser => {
     if (firebaseUser) {
-        // if user logged in allows this button to dismiss the modal
         $("#signIn").attr("data-dismiss", "modal")
         $("#signUp").attr("data-dismiss", "modal")
         $("#Welcome").text(`Welcome ${firebaseUser.displayName}`)
@@ -467,15 +435,13 @@ auth.onAuthStateChanged(firebaseUser => {
         $("#signInModal").hide()
         $("#logout").show()
         if (username != null) {
-            // adds the display name to their profile(email and pass automatically added already)
         auth.currentUser.updateProfile({
             displayName: username,
         })
     }
-    // sets the user variable
+    // this isn't working
     x = firebaseUser.displayName
     } else {
-        // shows the buttons that should be shown if user not signed in
         $("#signUpModal").show()
         $("#signInModal").show()
         $("#logout").hide()
@@ -483,15 +449,13 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 })
 
-// runs when something is added to users favorites
+// reminder to clean up the variables here
 database.ref().on("child_added", function(snap) {
     if (x != undefined) {
     let ab = snap.val()
-    // grabs user
     let keys = Object.keys(ab)
     for (let i = 0; i < keys.length; i++) {
         if (keys[i] == x) {
-            // grabs keys
             aoeu = ab[keys[i]]
             keys5= Object.keys(aoeu)
             for (j = 0; j < keys5.length; j++) {
